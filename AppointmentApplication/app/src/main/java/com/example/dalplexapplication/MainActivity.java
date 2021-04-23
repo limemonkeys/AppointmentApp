@@ -26,26 +26,33 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        addRow();
+        TableLayout table = (TableLayout) findViewById(R.id.AppointmentsTable);
+        int height = table.getLayoutParams().height;
+        int width = table.getLayoutParams().width;
+        int numRows = 12;
+        int newHeight = ((height/16 + 45) * numRows) + 90;
+
+        for (int i = 0; i < numRows; i++){
+            addRow(newHeight);
+        }
+
     }
 
-    protected void addRow(){
+    protected void addRow(int newHeight){
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
         TableLayout table = (TableLayout) findViewById(R.id.AppointmentsTable);
 
-        int height = displayMetrics.heightPixels;
         int width = table.getLayoutParams().width;
-
-
-
-
-        System.out.println(width);
 
         TableRow row = new TableRow(this);
 
-        row.setPadding(15,40,15,0);
+        row.setPadding(15,45,15,0);
+
+
+        int numRows = 12;
+        table.setLayoutParams(new TableLayout.LayoutParams(table.getLayoutParams().width, newHeight));
 
 
         TextView appointmentDay = new TextView(this);
@@ -76,13 +83,13 @@ public class MainActivity extends AppCompatActivity {
         appointmentTime.setMinWidth(width/3);
         appointmentAvailablility.setMinWidth(width/3);
 
-        appointmentDay.setMaxHeight(height/20);
-        appointmentTime.setMaxHeight(height/20);
-        appointmentAvailablility.setMaxHeight(height/20);
+        appointmentDay.setMaxHeight(newHeight/16);
+        appointmentTime.setMaxHeight(newHeight/16);
+        appointmentAvailablility.setMaxHeight(newHeight/16);
 
-        appointmentDay.setMinHeight(height/20);
-        appointmentTime.setMinHeight(height/20);
-        appointmentAvailablility.setMinHeight(height/20);
+        appointmentDay.setMinHeight(newHeight/16);
+        appointmentTime.setMinHeight(newHeight/16);
+        appointmentAvailablility.setMinHeight(newHeight/16);
 
         appointmentDay.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
         appointmentTime.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
