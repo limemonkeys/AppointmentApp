@@ -1,21 +1,15 @@
 package com.example.dalplexapplication;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
-import android.view.View;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-
-import com.google.android.material.shape.MaterialShapeDrawable;
-import com.google.android.material.shape.ShapeAppearanceModel;
 
 
 import org.jsoup.Jsoup;
@@ -24,12 +18,14 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.net.URLEncoder;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     int rowCounter = 1;
-
+    ArrayList<String> appointmentTimes = new ArrayList<>();
+    ArrayList<String> appointmentAvailablility = new ArrayList<>();
+    ArrayList<String> appointmentDates = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,10 +145,21 @@ public class MainActivity extends AppCompatActivity {
                     //System.out.print(appointment.getElementsByClass("pull-right").text() + " ");
                     //System.out.println(appointment.getElementsByTag("small").text() + " " + i);
                     //String[] temp = appointment.getElementsByTag("small").text().split("available");
-                    String temp = appointment.getElementsByTag("small").text();
-                    System.out.println(temp);
+                    String timeString = appointment.getElementsByTag("small").text();
+                    String[] tempList = timeString.split(" ");
+                    appointmentTimes.add(tempList[0] + " " +  tempList[1] + " " + tempList[2] + " " + tempList[3] + " " + tempList[4]);
+
+                    String dateString = appointment.getElementsByClass("program-schedule-card-header").text();
+                    appointmentDates.add(dateString);
+
+                    String availableString = appointment.getElementsByClass("pull-right").text();
+                    appointmentAvailablility.add(availableString);
                 }
-                System.out.println();
+                System.out.println(appointmentTimes);
+                System.out.println(appointmentDates);
+                System.out.println(appointmentAvailablility);
+
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
