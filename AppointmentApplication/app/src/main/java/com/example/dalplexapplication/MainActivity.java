@@ -24,8 +24,9 @@ public class MainActivity extends AppCompatActivity {
 
     int rowCounter = 1;
     ArrayList<String> appointmentTimes = new ArrayList<>();
-    ArrayList<String> appointmentAvailablility = new ArrayList<>();
+    ArrayList<Integer> appointmentAvailablility = new ArrayList<>();
     ArrayList<String> appointmentDates = new ArrayList<>();
+    ArrayList<Appointment> appointments = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,21 +146,27 @@ public class MainActivity extends AppCompatActivity {
                     //System.out.print(appointment.getElementsByClass("pull-right").text() + " ");
                     //System.out.println(appointment.getElementsByTag("small").text() + " " + i);
                     //String[] temp = appointment.getElementsByTag("small").text().split("available");
-                    String timeString = appointment.getElementsByTag("small").text();
-                    String[] tempList = timeString.split(" ");
-                    appointmentTimes.add(tempList[0] + " " +  tempList[1] + " " + tempList[2] + " " + tempList[3] + " " + tempList[4]);
+                    String temp = appointment.getElementsByTag("small").text();
+                    String[] tempList = temp.split(" ");
+                    String timeString = tempList[0] + " " +  tempList[1] + " " + tempList[2] + " " + tempList[3] + " " + tempList[4];
+                    appointmentTimes.add(timeString);
 
                     String dateString = appointment.getElementsByClass("program-schedule-card-header").text();
                     appointmentDates.add(dateString);
 
-                    String availableString = appointment.getElementsByClass("pull-right").text();
+                    temp = appointment.getElementsByClass("pull-right").text();
+                    tempList = temp.split(" ");
+                    int availableString = Integer.parseInt(tempList[0]);
                     appointmentAvailablility.add(availableString);
+
+                    Appointment newAppointment = new Appointment(dateString, timeString, availableString);
+                    appointments.add(newAppointment);
+                    System.out.println(newAppointment);
                 }
                 System.out.println(appointmentTimes);
                 System.out.println(appointmentDates);
                 System.out.println(appointmentAvailablility);
-
-
+                
             } catch (IOException e) {
                 e.printStackTrace();
             }
