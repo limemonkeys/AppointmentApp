@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -15,6 +16,15 @@ import android.widget.TextView;
 
 import com.google.android.material.shape.MaterialShapeDrawable;
 import com.google.android.material.shape.ShapeAppearanceModel;
+
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
+import java.net.URLEncoder;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,6 +45,13 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < numRows; i++){
             addRow(newHeight);
         }
+
+        String html = "<html><head><title>First parse</title></head>"
+                + "<body><p>Parsed HTML into a doc.</p></body></html>";
+        Document doc = Jsoup.parse(html);
+
+        AppointmentRetriever appt = new AppointmentRetriever();
+        appt.execute();
 
     }
 
@@ -110,5 +127,37 @@ public class MainActivity extends AppCompatActivity {
 
 
         table.addView(row, new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
+
+    }
+
+    private class AppointmentRetriever extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                String url = "https://www.dalsports.dal.ca/Program/GetProgramDetails?courseId=8993d840-c85b-4afb-b8a9-3c30b3c16817&semesterId=cefa4d21-6d59-4e72-81b8-7d66b8843351";
+                Document doc = Jsoup.connect(url).get();
+                //System.out.println(doc.body());
+                //Elements byClass = doc.body().getElementsByClass("TitleDiv");
+                //Elements byClass = doc.getElementsByClass("TitleDiv");
+                Elements byClass = doc.getElementsByClass("caption program-schedule-card-caption");
+                //Elements byClass = doc.getAllElements();
+                System.out.println(byClass.size());
+                for (Element appointment : byClass){
+                    //System.out.println("---------------------------");
+                    //System.out.print(appointment.getElementsByClass("program-schedule-card-header").text() + " ");
+                    //System.out.print(appointment.getElementsByClass("pull-right").text() + " ");
+                    //System.out.println(appointment.getElementsByTag("small").text() + " " + i);
+                    //String[] temp = appointment.getElementsByTag("small").text().split("available");
+                    String temp = appointment.getElementsByTag("small").text();
+                    System.out.println(temp);
+                }
+                System.out.println();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
     }
 }
+
