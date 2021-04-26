@@ -33,26 +33,35 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        AppointmentRetriever appt = new AppointmentRetriever();
+        appt.execute();
+    }
+
+    public void createTable(ArrayList<Appointment> returnedAppointments){
         TableLayout table = (TableLayout) findViewById(R.id.AppointmentsTable);
         int height = table.getLayoutParams().height;
         int width = table.getLayoutParams().width;
-        int numRows = 12;
-        int newHeight = ((height/16 + 45) * numRows) + 90;
 
-        for (int i = 0; i < numRows; i++){
-            addRow(newHeight);
+
+        int numRows = 0;
+        for (Appointment appointment : returnedAppointments){
+            //System.out.println(appointment.getAvailable());
+            if (appointment.getAvailable() > 0){
+                numRows++;
+            }
         }
+        int newHeight = ((150 + 45) * numRows) + (45 * 3);
 
-        String html = "<html><head><title>First parse</title></head>"
-                + "<body><p>Parsed HTML into a doc.</p></body></html>";
-        Document doc = Jsoup.parse(html);
 
-        AppointmentRetriever appt = new AppointmentRetriever();
-        appt.execute();
 
+        for (Appointment appointment : returnedAppointments){
+            if (appointment.getAvailable() > 0){
+                addRow(newHeight, appointment);
+            }
+        }
     }
 
-    protected void addRow(int newHeight){
+    protected void addRow(int newHeight, Appointment appointment){
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
@@ -65,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
         row.setPadding(15,45,15,0);
 
 
-        int numRows = 12;
         table.setLayoutParams(new TableLayout.LayoutParams(table.getLayoutParams().width, newHeight));
 
 
@@ -97,21 +105,30 @@ public class MainActivity extends AppCompatActivity {
         appointmentTime.setMinWidth(width/3);
         appointmentAvailablility.setMinWidth(width/3);
 
-        appointmentDay.setMaxHeight(newHeight/16);
-        appointmentTime.setMaxHeight(newHeight/16);
-        appointmentAvailablility.setMaxHeight(newHeight/16);
+        appointmentDay.setMaxHeight(150);
+        appointmentTime.setMaxHeight(150);
+        appointmentAvailablility.setMaxHeight(150);
 
-        appointmentDay.setMinHeight(newHeight/16);
-        appointmentTime.setMinHeight(newHeight/16);
-        appointmentAvailablility.setMinHeight(newHeight/16);
+        appointmentDay.setMinHeight(150);
+        appointmentTime.setMinHeight(150);
+        appointmentAvailablility.setMinHeight(150);
 
         appointmentDay.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
         appointmentTime.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
         appointmentAvailablility.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
 
+        /*
         String textDay = "March 20th";
         String textTime = "8:00am - 9:00am";
         String textAvailablility = "3 Appts";
+         */
+
+        //String textDay = appointment.getDate();
+
+        String textDay = appointment.getDate().replace(", ", "\n");
+
+        String textTime = appointment.getTime().replace(" - ", "-\n");
+        String textAvailablility = String.valueOf(appointment.getAvailable()) + " appt(s)";
 
         appointmentDay.setText(textDay);
         appointmentTime.setText(textTime);
@@ -127,10 +144,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private class AppointmentRetriever extends AsyncTask<Void, Void, Void> {
+    public class AppointmentRetriever extends AsyncTask<Void, Void, ArrayList<Appointment>> {
 
         @Override
-        protected Void doInBackground(Void... voids) {
+        protected ArrayList<Appointment> doInBackground(Void... voids) {
             try {
                 String url = "https://www.dalsports.dal.ca/Program/GetProgramDetails?courseId=8993d840-c85b-4afb-b8a9-3c30b3c16817&semesterId=cefa4d21-6d59-4e72-81b8-7d66b8843351";
                 Document doc = Jsoup.connect(url).get();
@@ -161,17 +178,25 @@ public class MainActivity extends AppCompatActivity {
 
                     Appointment newAppointment = new Appointment(dateString, timeString, availableString);
                     appointments.add(newAppointment);
-                    System.out.println(newAppointment);
+                    //System.out.println(newAppointment);
                 }
-                System.out.println(appointmentTimes);
-                System.out.println(appointmentDates);
-                System.out.println(appointmentAvailablility);
-                
+                //System.out.println(appointmentTimes);
+                //System.out.println(appointmentDates);
+                //System.out.println(appointmentAvailablility);
+                //onPostExecute(appointments);
+                return appointments;
             } catch (IOException e) {
                 e.printStackTrace();
             }
             return null;
         }
+
+        protected void onPostExecute(ArrayList<Appointment> returnedAppointments) {
+            returnSize(returnedAppointments);
+        }
+    }
+    public void returnSize(ArrayList<Appointment> returnedAppointments){
+        createTable(returnedAppointments);
     }
 }
 
