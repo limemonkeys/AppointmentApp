@@ -55,9 +55,8 @@ public class MainActivity extends AppCompatActivity {
                 numRows++;
             }
         }
-        int newHeight = ((150 + 45) * numRows) + (45 * 3);
 
-
+        int newHeight = Math.max(((150 + 45) * numRows) + (45 * 3), height);
 
         for (Appointment appointment : returnedAppointments){
             if (appointment.getAvailable() > 0){
