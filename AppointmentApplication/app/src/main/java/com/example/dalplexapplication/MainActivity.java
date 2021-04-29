@@ -39,6 +39,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ImageView menuButton = (ImageView) findViewById(R.id.menuButton);
+        menuButton.setColorFilter(Color.GRAY);
+
         ImageView settingsButton = (ImageView) findViewById(R.id.settingsButton);
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        int newHeight = Math.max(((150 + 45) * numRows) + (45 * 3), height);
+        int newHeight = Math.max(((200 + 45) * numRows), height);
 
         for (Appointment appointment : returnedAppointments){
             if (appointment.getAvailable() > 0){
