@@ -1,10 +1,8 @@
 package com.example.dalplexapplication;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -17,7 +15,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
-public class FilterMenu extends AppCompatActivity {
+public class FilterTimeMenu extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +32,7 @@ public class FilterMenu extends AppCompatActivity {
                 startActivity(intent);
 
                  */
-                Intent intent = new Intent(FilterMenu.this, MainActivity.class);
+                Intent intent = new Intent(FilterTimeMenu.this, MainActivity.class);
                 startActivity(intent);
             }
         });
@@ -52,7 +50,7 @@ public class FilterMenu extends AppCompatActivity {
                 startActivity(intent);
 
                  */
-                Intent intent = new Intent(FilterMenu.this, SettingsMenu.class);
+                Intent intent = new Intent(FilterTimeMenu.this, SettingsMenu.class);
                 startActivity(intent);
             }
         });
@@ -67,19 +65,21 @@ public class FilterMenu extends AppCompatActivity {
                 startActivity(intent);
 
                  */
-                Intent intent = new Intent(FilterMenu.this, HelpMenu.class);
+                Intent intent = new Intent(FilterTimeMenu.this, HelpMenu.class);
                 startActivity(intent);
             }
         });
 
 
         TableLayout table = (TableLayout) findViewById(R.id.AppointmentsTable);
-        addRow("Filter by Days", "FilterDayMenu");
-        addRow("Filter by Time", "FilterTimeMenu");
-
+        addRow("Monday Appts");
+        addRow("Tuesday Appts");
+        addRow("Wednesday Appts");
+        addRow("Thursday Appts");
+        addRow("Friday Appts");
     }
 
-    public void addRow(String text, String FilterType){
+    public void addRow(String text){
 
 
         TableLayout table = (TableLayout) findViewById(R.id.AppointmentsTable);
@@ -127,20 +127,6 @@ public class FilterMenu extends AppCompatActivity {
         filterText.setMinHeight(150);
         filterSwitch.setMinHeight(150);
 
-        row.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(FilterMenu.this, MainActivity.class);
-                if (FilterType.equals("FilterDayMenu")){
-                    intent = new Intent(FilterMenu.this, FilterDayMenu.class);
-
-                }
-                else if (FilterType.equals("FilterTimeMenu")){
-                    intent = new Intent(FilterMenu.this, FilterTimeMenu.class);
-                }
-                startActivity(intent);
-            }
-        });
 
         filterText.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
         filterSwitch.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));

@@ -13,6 +13,8 @@
         <activity android:name=".SettingsMenu" />
         <activity android:name=".HelpMenu" />
         <activity android:name=".FilterMenu" />
+        <activity android:name=".FilterDayMenu" />
+        <activity android:name=".FilterTimeMenu" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

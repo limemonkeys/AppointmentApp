@@ -10,8 +10,6 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -95,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         int height = table.getLayoutParams().height;
         int width = table.getLayoutParams().width;
 
-        //TODO: Re-enable to populate table
+        //Todo:
         /*
         int numRows = 0;
         for (Appointment appointment : returnedAppointments){
@@ -113,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
          */
+
     }
 
     protected void addRow(int newHeight, Appointment appointment){
@@ -195,14 +194,13 @@ public class MainActivity extends AppCompatActivity {
         row.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
+
                 Uri uri = Uri.parse("https://www.dalsports.dal.ca/Program/GetProgramDetails?courseId=8993d840-c85b-4afb-b8a9-3c30b3c16817&semesterId=cefa4d21-6d59-4e72-81b8-7d66b8843351#"); // missing 'http://' will cause crashed
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(intent);
 
-                 */
-                Intent intent = new Intent(MainActivity.this, SettingsMenu.class);
-                startActivity(intent);
+
+
             }
         });
 
