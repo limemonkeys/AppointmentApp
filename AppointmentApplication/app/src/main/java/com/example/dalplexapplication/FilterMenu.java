@@ -8,12 +8,12 @@ import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class HelpMenu extends AppCompatActivity {
+public class FilterMenu extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_help);
+        setContentView(R.layout.activity_filter);
 
         ImageView menuButton = (ImageView) findViewById(R.id.menuButton);
         menuButton.setOnClickListener(new View.OnClickListener() {
@@ -25,25 +25,13 @@ public class HelpMenu extends AppCompatActivity {
                 startActivity(intent);
 
                  */
-                Intent intent = new Intent(HelpMenu.this, MainActivity.class);
+                Intent intent = new Intent(FilterMenu.this, MainActivity.class);
                 startActivity(intent);
             }
         });
 
         ImageView filterMenu = (ImageView) findViewById(R.id.filterMenu);
-        filterMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /*
-                Uri uri = Uri.parse("https://www.dalsports.dal.ca/Program/GetProgramDetails?courseId=8993d840-c85b-4afb-b8a9-3c30b3c16817&semesterId=cefa4d21-6d59-4e72-81b8-7d66b8843351#"); // missing 'http://' will cause crashed
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(intent);
-
-                 */
-                Intent intent = new Intent(HelpMenu.this, FilterMenu.class);
-                startActivity(intent);
-            }
-        });
+        filterMenu.setColorFilter(Color.GRAY);
 
         ImageView settingsButton = (ImageView) findViewById(R.id.settingsButton);
         settingsButton.setOnClickListener(new View.OnClickListener() {
@@ -55,11 +43,24 @@ public class HelpMenu extends AppCompatActivity {
                 startActivity(intent);
 
                  */
-                Intent intent = new Intent(HelpMenu.this, SettingsMenu.class);
+                Intent intent = new Intent(FilterMenu.this, SettingsMenu.class);
                 startActivity(intent);
             }
         });
+
         ImageView helpButton = (ImageView) findViewById(R.id.helpButton);
-        helpButton.setColorFilter(Color.GRAY);
+        helpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /*
+                Uri uri = Uri.parse("https://www.dalsports.dal.ca/Program/GetProgramDetails?courseId=8993d840-c85b-4afb-b8a9-3c30b3c16817&semesterId=cefa4d21-6d59-4e72-81b8-7d66b8843351#"); // missing 'http://' will cause crashed
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+
+                 */
+                Intent intent = new Intent(FilterMenu.this, HelpMenu.class);
+                startActivity(intent);
+            }
+        });
     }
 }

@@ -42,6 +42,21 @@ public class MainActivity extends AppCompatActivity {
         ImageView menuButton = (ImageView) findViewById(R.id.menuButton);
         menuButton.setColorFilter(Color.GRAY);
 
+        ImageView filterMenu = (ImageView) findViewById(R.id.filterMenu);
+        filterMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /*
+                Uri uri = Uri.parse("https://www.dalsports.dal.ca/Program/GetProgramDetails?courseId=8993d840-c85b-4afb-b8a9-3c30b3c16817&semesterId=cefa4d21-6d59-4e72-81b8-7d66b8843351#"); // missing 'http://' will cause crashed
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+
+                 */
+                Intent intent = new Intent(MainActivity.this, FilterMenu.class);
+                startActivity(intent);
+            }
+        });
+
         ImageView settingsButton = (ImageView) findViewById(R.id.settingsButton);
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,7 +95,8 @@ public class MainActivity extends AppCompatActivity {
         int height = table.getLayoutParams().height;
         int width = table.getLayoutParams().width;
 
-
+        //TODO: Re-enable to populate table
+        /*
         int numRows = 0;
         for (Appointment appointment : returnedAppointments){
             //System.out.println(appointment.getAvailable());
@@ -96,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
                 addRow(newHeight, appointment);
             }
         }
+         */
     }
 
     protected void addRow(int newHeight, Appointment appointment){
