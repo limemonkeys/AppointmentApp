@@ -17,12 +17,15 @@ import androidx.core.content.res.ResourcesCompat;
 
 public class FilterTimeMenu extends AppCompatActivity {
 
+    int tableWidth, newHeight;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
 
         ImageView menuButton = (ImageView) findViewById(R.id.menuButton);
+        tableWidth = findViewById(R.id.AppointmentsTable).getLayoutParams().width;
         menuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,25 +73,43 @@ public class FilterTimeMenu extends AppCompatActivity {
             }
         });
 
-
-        TableLayout table = (TableLayout) findViewById(R.id.AppointmentsTable);
-        addRow("Monday Appts");
-        addRow("Tuesday Appts");
-        addRow("Wednesday Appts");
-        addRow("Thursday Appts");
-        addRow("Friday Appts");
-    }
-
-    public void addRow(String text){
-
-
         TableLayout table = (TableLayout) findViewById(R.id.AppointmentsTable);
         int height = table.getLayoutParams().height;
         int width = table.getLayoutParams().width;
 
+        //Currently hardcoded as these time intervals shouldn't change
+        int numRows = 11;
+        newHeight = Math.max(((150 + 45) * numRows) + 45, height);
+        //table.setLayoutParams(new TableLayout.LayoutParams(table.getLayoutParams().width, newHeight));
+        System.out.println(newHeight);
+
+        addRow("6:00 AM - 7:00 AM");
+        addRow("7:30 AM - 8:30 AM");
+        addRow("9:00 AM - 10:00 AM");
+        addRow("10:30 AM - 11:30 AM");
+        addRow("12:00 PM - 1:00 PM");
+        addRow("1:30 PM - 2:30 PM");
+        addRow("3:00 PM - 4:00 PM");
+        addRow("4:30 PM - 5:30 PM");
+        addRow("6:00 PM - 7:00 PM");
+        addRow("7:30 PM - 8:30 PM");
+        addRow("9:00 PM - 10:00 PM");
+    }
+
+    public void addRow(String text){
+
+        System.out.println(newHeight);
+        TableLayout table = (TableLayout) findViewById(R.id.AppointmentsTable);
+
+        int height = table.getLayoutParams().height;
+        int width = table.getLayoutParams().width;
+
+
         TableRow row = new TableRow(this);
 
         row.setPadding(15,45,15,0);
+        table.setLayoutParams(new TableLayout.LayoutParams(table.getLayoutParams().width, newHeight));
+
 
         TextView filterText = new TextView(this);
         Switch filterSwitch = new Switch(this);
@@ -111,7 +132,7 @@ public class FilterTimeMenu extends AppCompatActivity {
         filterText.setGravity(Gravity.CENTER);
         filterSwitch.setGravity(Gravity.CENTER);
 
-        filterText.setTextSize(24);
+        filterText.setTextSize(18);
 
         filterText.setMaxWidth(width/2);
         filterSwitch.setMaxWidth(width/2);
@@ -119,7 +140,8 @@ public class FilterTimeMenu extends AppCompatActivity {
         filterText.setMinWidth(width/2);
         filterSwitch.setMinWidth(width/2);
 
-        filterSwitch.setPadding(0,0,width/6,0);
+        filterSwitch.setPadding(0,0,tableWidth/6,0);
+        System.out.println("WIDTH: " + String.valueOf(width));
 
         filterText.setMaxHeight(150);
         filterSwitch.setMaxHeight(150);
@@ -134,10 +156,10 @@ public class FilterTimeMenu extends AppCompatActivity {
         filterText.setText(text);
         filterSwitch.setChecked(false);
 
-
         row.addView(filterText);
         row.addView(filterSwitch);
 
         table.addView(row, new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
+
     }
 }

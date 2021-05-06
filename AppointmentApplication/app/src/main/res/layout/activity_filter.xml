@@ -30,11 +30,12 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
+
     <ScrollView
-        android:id="@+id/scrollView3"
+        android:id="@+id/scrollView2"
         android:layout_width="352dp"
         android:layout_height="584dp"
-        android:layout_marginTop="128dp"
+        android:layout_marginTop="126dp"
         android:layout_weight="1"
         android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -67,6 +68,7 @@
                     android:background="@drawable/rounded_corners" />
             </TableLayout>
         </LinearLayout>
+
     </ScrollView>
 
     <ImageView

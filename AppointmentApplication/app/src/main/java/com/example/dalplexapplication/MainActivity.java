@@ -83,9 +83,11 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
+        //TODO: Uncomment to get appointments
+        /*
         AppointmentRetriever appt = new AppointmentRetriever();
         appt.execute();
+        */
     }
 
     public void createTable(ArrayList<Appointment> returnedAppointments){
@@ -93,8 +95,7 @@ public class MainActivity extends AppCompatActivity {
         int height = table.getLayoutParams().height;
         int width = table.getLayoutParams().width;
 
-        //Todo:
-        /*
+
         int numRows = 0;
         for (Appointment appointment : returnedAppointments){
             //System.out.println(appointment.getAvailable());
@@ -103,14 +104,19 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        int newHeight = Math.max(((200 + 45) * numRows), height);
+        int newHeight = Math.max(((200 + 45) * numRows) + 45, height);
 
         for (Appointment appointment : returnedAppointments){
             if (appointment.getAvailable() > 0){
                 addRow(newHeight, appointment);
             }
         }
-         */
+
+        System.out.println(appointmentTimes);
+        System.out.println(appointmentAvailablility);
+        System.out.println(appointmentDates);
+        System.out.println(appointments);
+
 
     }
 
@@ -125,7 +131,6 @@ public class MainActivity extends AppCompatActivity {
         TableRow row = new TableRow(this);
 
         row.setPadding(15,45,15,0);
-
 
         table.setLayoutParams(new TableLayout.LayoutParams(table.getLayoutParams().width, newHeight));
 

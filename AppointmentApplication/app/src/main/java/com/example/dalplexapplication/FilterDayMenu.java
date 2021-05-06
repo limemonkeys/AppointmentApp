@@ -17,10 +17,14 @@ import androidx.core.content.res.ResourcesCompat;
 
 public class FilterDayMenu extends AppCompatActivity {
 
+    int tableWidth, newHeight;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
+
+        tableWidth = findViewById(R.id.AppointmentsTable).getLayoutParams().width;
 
         ImageView menuButton = (ImageView) findViewById(R.id.menuButton);
         menuButton.setOnClickListener(new View.OnClickListener() {
@@ -70,13 +74,21 @@ public class FilterDayMenu extends AppCompatActivity {
             }
         });
 
-
         TableLayout table = (TableLayout) findViewById(R.id.AppointmentsTable);
-        addRow("Monday Appts");
-        addRow("Tuesday Appts");
-        addRow("Wednesday Appts");
-        addRow("Thursday Appts");
-        addRow("Friday Appts");
+        int height = table.getLayoutParams().height;
+        int width = table.getLayoutParams().width;
+
+        //Hardcoded as there should always be 7 days in a week
+        int numRows = 7;
+        newHeight = Math.max(((150 + 45) * numRows) + 45, height);
+
+        addRow("Monday");
+        addRow("Tuesday");
+        addRow("Wednesday");
+        addRow("Thursday");
+        addRow("Friday");
+        addRow("Saturday");
+        addRow("Sunday");
     }
 
     public void addRow(String text){
@@ -85,6 +97,8 @@ public class FilterDayMenu extends AppCompatActivity {
         TableLayout table = (TableLayout) findViewById(R.id.AppointmentsTable);
         int height = table.getLayoutParams().height;
         int width = table.getLayoutParams().width;
+
+
 
         TableRow row = new TableRow(this);
 
@@ -97,10 +111,6 @@ public class FilterDayMenu extends AppCompatActivity {
         filterText.setTextColor(Color.parseColor("#000000"));
         filterSwitch.setTextColor(Color.parseColor("#000000"));
 
-        /*
-        filterText.setBackgroundColor(Color.parseColor("#F2F197"));
-        filterSwitch.setBackgroundColor(Color.parseColor("#F2F197"));
-         */
 
         Typeface typeface = ResourcesCompat.getFont(this, R.font.fugaz_one);
         filterText.setTypeface(typeface);

@@ -17,7 +17,11 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
+import java.util.ArrayList;
+
 public class FilterMenu extends AppCompatActivity {
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,11 +95,9 @@ public class FilterMenu extends AppCompatActivity {
         row.setPadding(15,45,15,0);
 
         TextView filterText = new TextView(this);
-        Switch filterSwitch = new Switch(this);
 
 
         filterText.setTextColor(Color.parseColor("#000000"));
-        filterSwitch.setTextColor(Color.parseColor("#000000"));
 
         /*
         filterText.setBackgroundColor(Color.parseColor("#F2F197"));
@@ -106,26 +108,18 @@ public class FilterMenu extends AppCompatActivity {
         filterText.setTypeface(typeface);
 
         filterText.setBackgroundColor(Color.parseColor("#F2F197"));
-        filterSwitch.setBackgroundColor(Color.parseColor("#F2F197"));
 
         filterText.setGravity(Gravity.CENTER);
-        filterSwitch.setGravity(Gravity.CENTER);
 
         filterText.setTextSize(24);
 
-        filterText.setMaxWidth(width/2);
-        filterSwitch.setMaxWidth(width/2);
+        filterText.setMaxWidth(width);
 
-        filterText.setMinWidth(width/2);
-        filterSwitch.setMinWidth(width/2);
-
-        filterSwitch.setPadding(0,0,width/6,0);
+        filterText.setMinWidth(width);
 
         filterText.setMaxHeight(150);
-        filterSwitch.setMaxHeight(150);
 
         filterText.setMinHeight(150);
-        filterSwitch.setMinHeight(150);
 
         row.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,14 +137,11 @@ public class FilterMenu extends AppCompatActivity {
         });
 
         filterText.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
-        filterSwitch.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
 
         filterText.setText(text);
-        filterSwitch.setChecked(false);
 
 
         row.addView(filterText);
-        row.addView(filterSwitch);
 
         table.addView(row, new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
     }
