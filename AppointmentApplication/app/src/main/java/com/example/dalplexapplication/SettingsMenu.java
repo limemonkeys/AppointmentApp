@@ -25,7 +25,7 @@ public class SettingsMenu extends AppCompatActivity {
                 startActivity(intent);
 
                  */
-                Intent intent = new Intent(SettingsMenu.this, MainActivity.class);
+                Intent intent = new Intent(SettingsMenu.this, LandingPage.class);
                 startActivity(intent);
             }
         });

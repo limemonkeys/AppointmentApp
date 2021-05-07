@@ -35,7 +35,7 @@ public class FilterTimeMenu extends AppCompatActivity {
                 startActivity(intent);
 
                  */
-                Intent intent = new Intent(FilterTimeMenu.this, MainActivity.class);
+                Intent intent = new Intent(FilterTimeMenu.this, LandingPage.class);
                 startActivity(intent);
             }
         });

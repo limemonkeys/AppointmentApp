@@ -1,23 +1,18 @@
 package com.example.dalplexapplication;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
-
-import java.util.ArrayList;
 
 public class FilterMenu extends AppCompatActivity {
 
@@ -38,7 +33,7 @@ public class FilterMenu extends AppCompatActivity {
                 startActivity(intent);
 
                  */
-                Intent intent = new Intent(FilterMenu.this, MainActivity.class);
+                Intent intent = new Intent(FilterMenu.this, LandingPage.class);
                 startActivity(intent);
             }
         });
@@ -124,7 +119,7 @@ public class FilterMenu extends AppCompatActivity {
         row.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(FilterMenu.this, MainActivity.class);
+                Intent intent = new Intent(FilterMenu.this, LandingPage.class);
                 if (FilterType.equals("FilterDayMenu")){
                     intent = new Intent(FilterMenu.this, FilterDayMenu.class);
 

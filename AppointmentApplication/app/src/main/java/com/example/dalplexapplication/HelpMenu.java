@@ -25,7 +25,7 @@ public class HelpMenu extends AppCompatActivity {
                 startActivity(intent);
 
                  */
-                Intent intent = new Intent(HelpMenu.this, MainActivity.class);
+                Intent intent = new Intent(HelpMenu.this, LandingPage.class);
                 startActivity(intent);
             }
         });

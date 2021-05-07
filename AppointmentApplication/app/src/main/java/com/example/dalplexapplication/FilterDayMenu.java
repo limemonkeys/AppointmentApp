@@ -36,7 +36,7 @@ public class FilterDayMenu extends AppCompatActivity {
                 startActivity(intent);
 
                  */
-                Intent intent = new Intent(FilterDayMenu.this, MainActivity.class);
+                Intent intent = new Intent(FilterDayMenu.this, LandingPage.class);
                 startActivity(intent);
             }
         });

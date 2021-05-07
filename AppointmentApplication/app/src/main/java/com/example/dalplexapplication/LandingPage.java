@@ -24,7 +24,7 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class LandingPage extends AppCompatActivity {
 
     int rowCounter = 1;
     ArrayList<String> appointmentTimes = new ArrayList<>();
@@ -36,6 +36,37 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        /*
+
+
+        //Get saved variables (example for two different SharedPreferences)
+        SharedPreferences mPrefs = getSharedPreferences("userinfo", 0);
+        String mString = mPrefs.getString("tag", "default_value_if_variable_not_found");
+
+        SharedPreferences.Editor mEditor = mPrefs.edit();
+        mEditor.putString("tag", "gunga ginga!").commit();
+
+        SharedPreferences nPrefs = getSharedPreferences("preferences", 0);
+        String nString = nPrefs.getString("Mondays", "default_value_if_variable_not_found");
+
+        SharedPreferences.Editor nEditor = nPrefs.edit();
+        nEditor.putString("Mondays", "yes please!").commit();
+
+        System.out.println("mString ONE: " + mString);
+
+        mPrefs = getSharedPreferences("userinfo", 0);
+        mString = mPrefs.getString("tag", "default_value_if_variable_not_found");
+
+        nPrefs = getSharedPreferences("preferences", 0);
+        nString = nPrefs.getString("Mondays", "default_value_if_variable_not_found");
+
+        System.out.println("nString ONE: " + nString);
+
+         */
+
+
+
 
         ImageView menuButton = (ImageView) findViewById(R.id.menuButton);
         menuButton.setColorFilter(Color.GRAY);
@@ -50,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
 
                  */
-                Intent intent = new Intent(MainActivity.this, FilterMenu.class);
+                Intent intent = new Intent(LandingPage.this, FilterMenu.class);
                 startActivity(intent);
             }
         });
@@ -65,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
 
                  */
-                Intent intent = new Intent(MainActivity.this, SettingsMenu.class);
+                Intent intent = new Intent(LandingPage.this, SettingsMenu.class);
                 startActivity(intent);
             }
         });
@@ -79,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
 
                  */
-                Intent intent = new Intent(MainActivity.this, HelpMenu.class);
+                Intent intent = new Intent(LandingPage.this, HelpMenu.class);
                 startActivity(intent);
             }
         });
