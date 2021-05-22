@@ -1,6 +1,7 @@
 package com.example.dalplexapplication;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -15,9 +16,13 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
+import java.util.ArrayList;
+
 public class FilterTimeMenu extends AppCompatActivity {
 
     int tableWidth, newHeight;
+
+    SharedPreferences timePreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,20 +88,30 @@ public class FilterTimeMenu extends AppCompatActivity {
         //table.setLayoutParams(new TableLayout.LayoutParams(table.getLayoutParams().width, newHeight));
         System.out.println(newHeight);
 
-        addRow("6:00 AM - 7:00 AM");
-        addRow("7:30 AM - 8:30 AM");
-        addRow("9:00 AM - 10:00 AM");
-        addRow("10:30 AM - 11:30 AM");
-        addRow("12:00 PM - 1:00 PM");
-        addRow("1:30 PM - 2:30 PM");
-        addRow("3:00 PM - 4:00 PM");
-        addRow("4:30 PM - 5:30 PM");
-        addRow("6:00 PM - 7:00 PM");
-        addRow("7:30 PM - 8:30 PM");
-        addRow("9:00 PM - 10:00 PM");
+        timePreferences = getSharedPreferences("timePreferences", MODE_PRIVATE);
+
+        // Get saved variables
+        // NOTE: the int is a mode. Not a unique number
+        ArrayList<String> timeslots = new ArrayList<>();
+
+        timeslots.add("6:00 AM - 7:00 AM");
+        timeslots.add("7:30 AM - 8:30 AM");
+        timeslots.add("9:00 AM - 10:00 AM");
+        timeslots.add("10:30 AM - 11:30 AM");
+        timeslots.add("12:00 PM - 1:00 PM");
+        timeslots.add("1:30 PM - 2:30 PM");
+        timeslots.add("3:00 PM - 4:00 PM");
+        timeslots.add("4:30 PM - 5:30 PM");
+        timeslots.add("6:00 PM - 7:00 PM");
+        timeslots.add("7:30 PM - 8:30 PM");
+        timeslots.add("9:00 PM - 10:00 PM");
+
+        for(String timeslot_name : timeslots){
+            addRow(timeslot_name);
+        }
     }
 
-    public void addRow(String text){
+    public void addRow(String time){
 
         System.out.println(newHeight);
         TableLayout table = (TableLayout) findViewById(R.id.AppointmentsTable);
@@ -153,8 +168,29 @@ public class FilterTimeMenu extends AppCompatActivity {
         filterText.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
         filterSwitch.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
 
-        filterText.setText(text);
+        filterText.setText(time);
         filterSwitch.setChecked(false);
+
+
+        timePreferences = getSharedPreferences("timePreferences", MODE_PRIVATE);
+        //Boolean.getValue(...) doesn't work
+        filterSwitch.setChecked(timePreferences.getString(time, String.valueOf(false)).equals("true"));
+
+        filterSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //System.out.println("-------------------");
+                timePreferences = getSharedPreferences("timePreferences", 0);
+                //System.out.println("filterSwitch.isChecked(): " + filterSwitch.isChecked());
+                //System.out.println("new get: " + timePreferences.getString(day, String.valueOf(false)));
+                SharedPreferences.Editor editPreference = timePreferences.edit();
+                editPreference.putString(time, String.valueOf(filterSwitch.isChecked())).commit();
+                //timePreferences = getSharedPreferences("timePreferences", 0);
+                //System.out.println("filterSwitch.isChecked(): " + filterSwitch.isChecked());
+                //System.out.println("new get: " + timePreferences.getString(day, String.valueOf(false)));
+
+            }
+        });
 
         row.addView(filterText);
         row.addView(filterSwitch);

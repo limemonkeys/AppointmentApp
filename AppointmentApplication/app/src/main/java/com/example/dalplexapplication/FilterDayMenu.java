@@ -1,8 +1,10 @@
 package com.example.dalplexapplication;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -15,9 +17,13 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
+import java.util.ArrayList;
+
 public class FilterDayMenu extends AppCompatActivity {
 
     int tableWidth, newHeight;
+
+    SharedPreferences dayPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,16 +88,30 @@ public class FilterDayMenu extends AppCompatActivity {
         int numRows = 7;
         newHeight = Math.max(((150 + 45) * numRows) + 45, height);
 
-        addRow("Monday");
-        addRow("Tuesday");
-        addRow("Wednesday");
-        addRow("Thursday");
-        addRow("Friday");
-        addRow("Saturday");
-        addRow("Sunday");
+        dayPreferences = getSharedPreferences("dayPreferences", MODE_PRIVATE);
+
+        ArrayList<String> days = new ArrayList<>();
+
+        days.add("Monday");
+        days.add("Tuesday");
+        days.add("Wednesday");
+        days.add("Thursday");
+        days.add("Friday");
+        days.add("Saturday");
+        days.add("Sunday");
+
+
+        for(String day_name : days){
+            addRow(day_name);
+        }
+
     }
 
-    public void addRow(String text){
+
+    // TODO: dayPreference ends up being fixed when row is intialized. Make an inital call to set the switch, then make every other reference a getString call within onClick
+    public void addRow(String day){
+
+
 
 
         TableLayout table = (TableLayout) findViewById(R.id.AppointmentsTable);
@@ -101,7 +121,6 @@ public class FilterDayMenu extends AppCompatActivity {
 
 
         TableRow row = new TableRow(this);
-
         row.setPadding(15,45,15,0);
 
         TextView filterText = new TextView(this);
@@ -141,9 +160,28 @@ public class FilterDayMenu extends AppCompatActivity {
         filterText.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
         filterSwitch.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
 
-        filterText.setText(text);
-        filterSwitch.setChecked(false);
+        filterText.setText(day);
 
+        dayPreferences = getSharedPreferences("dayPreferences", MODE_PRIVATE);
+        //Boolean.getValue(...) doesn't work
+        filterSwitch.setChecked(dayPreferences.getString(day, String.valueOf(false)).equals("true"));
+
+
+        filterSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //System.out.println("-------------------");
+                dayPreferences = getSharedPreferences("dayPreferences", 0);
+                //System.out.println("filterSwitch.isChecked(): " + filterSwitch.isChecked());
+                //System.out.println("new get: " + dayPreferences.getString(day, String.valueOf(false)));
+                SharedPreferences.Editor editPreference = dayPreferences.edit();
+                editPreference.putString(day, String.valueOf(filterSwitch.isChecked())).commit();
+                //dayPreferences = getSharedPreferences("dayPreferences", 0);
+                //System.out.println("filterSwitch.isChecked(): " + filterSwitch.isChecked());
+                //System.out.println("new get: " + dayPreferences.getString(day, String.valueOf(false)));
+
+            }
+        });
 
         row.addView(filterText);
         row.addView(filterSwitch);
