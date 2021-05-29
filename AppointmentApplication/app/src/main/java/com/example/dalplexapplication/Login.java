@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 
 import android.view.WindowManager;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,7 +17,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 public class Login extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,8 +39,20 @@ public class Login extends AppCompatActivity {
                 else{
                     Intent intent = new Intent(Login.this, LandingPage.class);
                     startActivity(intent);
+                    /*
+                    Dalplex JavaScript is not functioning in webview
+                    Questionable on whether automated login/signup will work
+
+                    WebView myWebView = new WebView(getApplicationContext());
+                    myWebView.loadUrl("https://www.dalsports.dal.ca/Program/GetProducts?classification=f22e8568-5cb8-464f-93f6-b390759240de");
+                    setContentView(myWebView);
+                    myWebView.loadUrl("javascript:showLogin('/Program/GetProducts?classification=f22e8568-5cb8-464f-93f6-b390759240de');");
+                    setContentView(myWebView);
+                     */
                 }
             }
         });
     }
+
+
 }
