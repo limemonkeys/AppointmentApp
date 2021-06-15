@@ -3,6 +3,7 @@ package com.example.dalplexapplication;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -115,10 +116,10 @@ public class LandingPage extends AppCompatActivity {
             }
         });
         //TODO: Uncomment to get appointments
-        /*
+        //Dalplex back up :)
         AppointmentRetriever appt = new AppointmentRetriever();
         appt.execute();
-        */
+
     }
 
     public void createTable(ArrayList<Appointment> returnedAppointments){
@@ -126,20 +127,37 @@ public class LandingPage extends AppCompatActivity {
         int height = table.getLayoutParams().height;
         int width = table.getLayoutParams().width;
 
+        SharedPreferences dayPreferences = getSharedPreferences("dayPreferences", 0);
 
         int numRows = 0;
         for (Appointment appointment : returnedAppointments){
             //System.out.println(appointment.getAvailable());
             if (appointment.getAvailable() > 0){
-                numRows++;
+                String currDate = appointment.getDate().split(",")[0];
+                boolean preferredDate = dayPreferences.getString(currDate, String.valueOf(false)).equals("true");
+                System.out.println("DATE: " + appointment.getDate().split(",")[0]);
+                System.out.println("DAYPREF: " + dayPreferences.getString(appointment.getDate(), String.valueOf(false)));
+                System.out.println("PREFERREDDATE: " + preferredDate);
+                if (preferredDate){
+                    numRows++;
+                }
             }
         }
 
         int newHeight = Math.max(((200 + 45) * numRows) + 45, height);
 
+
         for (Appointment appointment : returnedAppointments){
             if (appointment.getAvailable() > 0){
-                addRow(newHeight, appointment);
+                String currDate = appointment.getDate().split(",")[0];
+                boolean preferredDate = dayPreferences.getString(currDate, String.valueOf(false)).equals("true");
+                System.out.println("DATE: " + appointment.getDate().split(",")[0]);
+                System.out.println("DAYPREF: " + dayPreferences.getString(appointment.getDate(), String.valueOf(false)));
+                System.out.println("PREFERREDDATE: " + preferredDate);
+                if (preferredDate){
+                    addRow(newHeight, appointment);
+                }
+
             }
         }
 

@@ -175,6 +175,7 @@ public class FilterDayMenu extends AppCompatActivity {
                 //System.out.println("filterSwitch.isChecked(): " + filterSwitch.isChecked());
                 //System.out.println("new get: " + dayPreferences.getString(day, String.valueOf(false)));
                 SharedPreferences.Editor editPreference = dayPreferences.edit();
+                System.out.println(day);
                 editPreference.putString(day, String.valueOf(filterSwitch.isChecked())).commit();
                 //dayPreferences = getSharedPreferences("dayPreferences", 0);
                 //System.out.println("filterSwitch.isChecked(): " + filterSwitch.isChecked());
