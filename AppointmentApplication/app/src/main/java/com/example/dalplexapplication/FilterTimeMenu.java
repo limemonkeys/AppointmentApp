@@ -83,7 +83,7 @@ public class FilterTimeMenu extends AppCompatActivity {
         int width = table.getLayoutParams().width;
 
         //Currently hardcoded as these time intervals shouldn't change
-        int numRows = 11;
+        int numRows = 11 + 9;
         newHeight = Math.max(((150 + 45) * numRows) + 45, height);
         //table.setLayoutParams(new TableLayout.LayoutParams(table.getLayoutParams().width, newHeight));
         System.out.println(newHeight);
@@ -94,6 +94,9 @@ public class FilterTimeMenu extends AppCompatActivity {
         // NOTE: the int is a mode. Not a unique number
         ArrayList<String> timeslots = new ArrayList<>();
 
+        // TODO: Implement flexible times (not hardcoded)
+        // No more 9 to 10 pm appts
+        // As of reopening after third wave, Dalplex has special times for the weekend
         timeslots.add("6:00 AM - 7:00 AM");
         timeslots.add("7:30 AM - 8:30 AM");
         timeslots.add("9:00 AM - 10:00 AM");
@@ -104,7 +107,20 @@ public class FilterTimeMenu extends AppCompatActivity {
         timeslots.add("4:30 PM - 5:30 PM");
         timeslots.add("6:00 PM - 7:00 PM");
         timeslots.add("7:30 PM - 8:30 PM");
-        timeslots.add("9:00 PM - 10:00 PM");
+
+        // Saturday times
+        timeslots.add("7:00 AM - 8:00 AM");
+        timeslots.add("8:30 AM - 9:30 AM");
+        timeslots.add("10:00 AM - 11:00 AM");
+        timeslots.add("11:30 AM - 12:30 PM");
+        timeslots.add("1:00 PM - 2:00 PM");
+        timeslots.add("2:30 PM - 3:30 PM");
+        timeslots.add("4:00 PM - 5:00 PM");
+        timeslots.add("5:30 PM - 6:30 PM");
+        timeslots.add("7:00 PM - 8:00 PM");
+
+
+
 
         for(String timeslot_name : timeslots){
             addRow(timeslot_name);
@@ -183,6 +199,7 @@ public class FilterTimeMenu extends AppCompatActivity {
                 timePreferences = getSharedPreferences("timePreferences", 0);
                 //System.out.println("filterSwitch.isChecked(): " + filterSwitch.isChecked());
                 //System.out.println("new get: " + timePreferences.getString(day, String.valueOf(false)));
+                System.out.println(time);
                 SharedPreferences.Editor editPreference = timePreferences.edit();
                 editPreference.putString(time, String.valueOf(filterSwitch.isChecked())).commit();
                 //timePreferences = getSharedPreferences("timePreferences", 0);

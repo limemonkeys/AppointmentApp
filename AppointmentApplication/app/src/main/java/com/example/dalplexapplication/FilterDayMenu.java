@@ -108,7 +108,7 @@ public class FilterDayMenu extends AppCompatActivity {
     }
 
 
-    // TODO: dayPreference ends up being fixed when row is intialized. Make an inital call to set the switch, then make every other reference a getString call within onClick
+    // TODO: dayPreference ends up being fixed when row is initialized. Make an initial call to set the switch, then make every other reference a getString call within onClick
     public void addRow(String day){
 
 
@@ -176,6 +176,8 @@ public class FilterDayMenu extends AppCompatActivity {
                 //System.out.println("new get: " + dayPreferences.getString(day, String.valueOf(false)));
                 SharedPreferences.Editor editPreference = dayPreferences.edit();
                 System.out.println(day);
+                System.out.println(String.valueOf(filterSwitch.isChecked()));
+                //Apply does not produce desired results
                 editPreference.putString(day, String.valueOf(filterSwitch.isChecked())).commit();
                 //dayPreferences = getSharedPreferences("dayPreferences", 0);
                 //System.out.println("filterSwitch.isChecked(): " + filterSwitch.isChecked());

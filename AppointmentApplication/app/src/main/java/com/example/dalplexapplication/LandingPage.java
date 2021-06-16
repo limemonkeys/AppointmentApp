@@ -38,34 +38,6 @@ public class LandingPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /*
-        //Get saved variables (example for two different SharedPreferences)
-        SharedPreferences mPrefs = getSharedPreferences("userinfo", 0);
-        String mString = mPrefs.getString("tag", "default_value_if_variable_not_found");
-
-        SharedPreferences.Editor mEditor = mPrefs.edit();
-        mEditor.putString("tag", "gunga ginga!").commit();
-
-        SharedPreferences nPrefs = getSharedPreferences("preferences", 0);
-        String nString = nPrefs.getString("Mondays", "default_value_if_variable_not_found");
-
-        SharedPreferences.Editor nEditor = nPrefs.edit();
-        nEditor.putString("Mondays", "yes please!").commit();
-
-        System.out.println("mString ONE: " + mString);
-
-        mPrefs = getSharedPreferences("userinfo", 0);
-        mString = mPrefs.getString("tag", "default_value_if_variable_not_found");
-
-        nPrefs = getSharedPreferences("preferences", 0);
-        nString = nPrefs.getString("Mondays", "default_value_if_variable_not_found");
-
-        System.out.println("nString ONE: " + nString);
-         */
-
-
-
-
         ImageView menuButton = (ImageView) findViewById(R.id.menuButton);
         menuButton.setColorFilter(Color.GRAY);
 
@@ -73,12 +45,6 @@ public class LandingPage extends AppCompatActivity {
         filterMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
-                Uri uri = Uri.parse("https://www.dalsports.dal.ca/Program/GetProgramDetails?courseId=8993d840-c85b-4afb-b8a9-3c30b3c16817&semesterId=cefa4d21-6d59-4e72-81b8-7d66b8843351#"); // missing 'http://' will cause crashed
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(intent);
-
-                 */
                 Intent intent = new Intent(LandingPage.this, FilterMenu.class);
                 startActivity(intent);
             }
@@ -88,35 +54,24 @@ public class LandingPage extends AppCompatActivity {
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
-                Uri uri = Uri.parse("https://www.dalsports.dal.ca/Program/GetProgramDetails?courseId=8993d840-c85b-4afb-b8a9-3c30b3c16817&semesterId=cefa4d21-6d59-4e72-81b8-7d66b8843351#"); // missing 'http://' will cause crashed
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(intent);
-
-                 */
                 Intent intent = new Intent(LandingPage.this, SettingsMenu.class);
                 startActivity(intent);
             }
         });
+
         ImageView helpButton = (ImageView) findViewById(R.id.helpButton);
         helpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
-                Uri uri = Uri.parse("https://www.dalsports.dal.ca/Program/GetProgramDetails?courseId=8993d840-c85b-4afb-b8a9-3c30b3c16817&semesterId=cefa4d21-6d59-4e72-81b8-7d66b8843351#"); // missing 'http://' will cause crashed
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(intent);
-
-                 */
                 Intent intent = new Intent(LandingPage.this, HelpMenu.class);
                 startActivity(intent);
             }
         });
+
         //TODO: Uncomment to get appointments
         //Dalplex back up :)
         AppointmentRetriever appt = new AppointmentRetriever();
         appt.execute();
-
     }
 
     public void createTable(ArrayList<Appointment> returnedAppointments){
@@ -125,45 +80,69 @@ public class LandingPage extends AppCompatActivity {
         int width = table.getLayoutParams().width;
 
         SharedPreferences dayPreferences = getSharedPreferences("dayPreferences", 0);
+        SharedPreferences timePreferences = getSharedPreferences("timePreferences", 0);
+
+        System.out.println("-------DAY PREFERENCES---------");
+        System.out.println(dayPreferences.getString("Monday", String.valueOf(false)).equals("true"));
+        System.out.println(dayPreferences.getString("Tuesday", String.valueOf(false)).equals("true"));
+        System.out.println(dayPreferences.getString("Wednesday", String.valueOf(false)).equals("true"));
+        System.out.println(dayPreferences.getString("Thursday", String.valueOf(false)).equals("true"));
+        System.out.println(dayPreferences.getString("Friday", String.valueOf(false)).equals("true"));
+        System.out.println(dayPreferences.getString("Saturday", String.valueOf(false)).equals("true"));
+        System.out.println(dayPreferences.getString("Sunday", String.valueOf(false)).equals("true"));
+
+        System.out.println();
+
+        System.out.println("-------Time PREFERENCES---------");
+        System.out.println(dayPreferences.getString("6:00 AM - 7:00 AM", String.valueOf(false)).equals("true"));
+        System.out.println(dayPreferences.getString("7:30 AM - 8:30 AM", String.valueOf(false)).equals("true"));
+        System.out.println(dayPreferences.getString("9:00 AM - 10:00 AM", String.valueOf(false)).equals("true"));
+        System.out.println(dayPreferences.getString("10:30 AM - 11:30 AM", String.valueOf(false)).equals("true"));
+        System.out.println(dayPreferences.getString("12:00 PM - 1:00 PM", String.valueOf(false)).equals("true"));
+        System.out.println(dayPreferences.getString("1:30 PM - 2:30 PM", String.valueOf(false)).equals("true"));
+        System.out.println(dayPreferences.getString("3:00 PM - 4:00 PM", String.valueOf(false)).equals("true"));
+        System.out.println(dayPreferences.getString("4:30 PM - 5:30 PM", String.valueOf(false)).equals("true"));
+        System.out.println(dayPreferences.getString("6:00 PM - 7:00 PM", String.valueOf(false)).equals("true"));
+        System.out.println(dayPreferences.getString("7:30 PM - 8:30 PM", String.valueOf(false)).equals("true"));
+
+        System.out.println(returnedAppointments);
 
         int numRows = 0;
         for (Appointment appointment : returnedAppointments){
-            //System.out.println(appointment.getAvailable());
             if (appointment.getAvailable() > 0){
                 String currDate = appointment.getDate().split(",")[0];
                 boolean preferredDate = dayPreferences.getString(currDate, String.valueOf(false)).equals("true");
-                System.out.println("DATE: " + appointment.getDate().split(",")[0]);
-                System.out.println("DAYPREF: " + dayPreferences.getString(appointment.getDate(), String.valueOf(false)));
-                System.out.println("PREFERREDDATE: " + preferredDate);
                 if (preferredDate){
-                    numRows++;
+                    String currTime = appointment.getTime();
+                    boolean preferredTime = timePreferences.getString(currTime, String.valueOf(false)).equals("true");
+
+                    System.out.println("currTime: " + currTime);
+                    System.out.println("preferredTime: " + preferredTime);
+                    if (preferredTime){
+                        numRows++;
+                    }
                 }
             }
         }
 
         int newHeight = Math.max(((200 + 45) * numRows) + 45, height);
 
-
         for (Appointment appointment : returnedAppointments){
             if (appointment.getAvailable() > 0){
                 String currDate = appointment.getDate().split(",")[0];
                 boolean preferredDate = dayPreferences.getString(currDate, String.valueOf(false)).equals("true");
-                System.out.println("DATE: " + appointment.getDate().split(",")[0]);
-                System.out.println("DAYPREF: " + dayPreferences.getString(appointment.getDate(), String.valueOf(false)));
-                System.out.println("PREFERREDDATE: " + preferredDate);
+                System.out.println(currDate + " " + preferredDate);
                 if (preferredDate){
-                    addRow(newHeight, appointment);
-                }
 
+                    String currTime = appointment.getTime();
+                    boolean preferredTime = timePreferences.getString(currTime, String.valueOf(false)).equals("true");
+
+                    if (preferredTime){
+                        addRow(newHeight, appointment);
+                    }
+                }
             }
         }
-
-        System.out.println(appointmentTimes);
-        System.out.println(appointmentAvailablility);
-        System.out.println(appointmentDates);
-        System.out.println(appointments);
-
-
     }
 
     protected void addRow(int newHeight, Appointment appointment){
