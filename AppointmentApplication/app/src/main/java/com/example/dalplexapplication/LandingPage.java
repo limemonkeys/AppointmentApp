@@ -39,8 +39,6 @@ public class LandingPage extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         /*
-
-
         //Get saved variables (example for two different SharedPreferences)
         SharedPreferences mPrefs = getSharedPreferences("userinfo", 0);
         String mString = mPrefs.getString("tag", "default_value_if_variable_not_found");
@@ -63,7 +61,6 @@ public class LandingPage extends AppCompatActivity {
         nString = nPrefs.getString("Mondays", "default_value_if_variable_not_found");
 
         System.out.println("nString ONE: " + nString);
-
          */
 
 
@@ -269,33 +266,63 @@ public class LandingPage extends AppCompatActivity {
             try {
                 String url = "https://www.dalsports.dal.ca/Program/GetProgramDetails?courseId=8993d840-c85b-4afb-b8a9-3c30b3c16817&semesterId=cefa4d21-6d59-4e72-81b8-7d66b8843351";
                 Document doc = Jsoup.connect(url).get();
+                System.out.println("Got website");
                 //System.out.println(doc.body());
                 //Elements byClass = doc.body().getElementsByClass("TitleDiv");
                 //Elements byClass = doc.getElementsByClass("TitleDiv");
                 Elements byClass = doc.getElementsByClass("caption program-schedule-card-caption");
+                System.out.println("getByClass");
                 //Elements byClass = doc.getAllElements();
                 System.out.println(byClass.size());
                 for (Element appointment : byClass){
+                    System.out.println("Iteration");
                     //System.out.println("---------------------------");
                     //System.out.print(appointment.getElementsByClass("program-schedule-card-header").text() + " ");
                     //System.out.print(appointment.getElementsByClass("pull-right").text() + " ");
                     //System.out.println(appointment.getElementsByTag("small").text() + " " + i);
                     //String[] temp = appointment.getElementsByTag("small").text().split("available");
+
                     String temp = appointment.getElementsByTag("small").text();
+                    System.out.println("Get text");
                     String[] tempList = temp.split(" ");
+                    System.out.println("Split text");
+
                     String timeString = tempList[0] + " " +  tempList[1] + " " + tempList[2] + " " + tempList[3] + " " + tempList[4];
+                    System.out.println("Create timeString");
+
                     appointmentTimes.add(timeString);
+                    System.out.println("added to appointmentTimes");
 
                     String dateString = appointment.getElementsByClass("program-schedule-card-header").text();
+                    System.out.println("Created dateString");
+
                     appointmentDates.add(dateString);
+                    System.out.println("added to appointmentDates");
 
                     temp = appointment.getElementsByClass("pull-right").text();
+                    System.out.println("Created temp?");
+
                     tempList = temp.split(" ");
-                    int availableString = Integer.parseInt(tempList[0]);
+                    System.out.println("Split temp?");
+
+                    int availableString = 0;
+                    if (!tempList[0].equals("No")){
+                        availableString = Integer.parseInt(tempList[0]);
+                    }
+
+                    System.out.println(availableString);
+
+                    System.out.println("Created availableString");
+
                     appointmentAvailablility.add(availableString);
+                    System.out.println("added to appointmentAvailablility");
+
+                    System.out.println("Finished creation");
 
                     Appointment newAppointment = new Appointment(dateString, timeString, availableString);
+                    System.out.println("Appointment created");
                     appointments.add(newAppointment);
+                    System.out.println("added to appointments");
                     //System.out.println(newAppointment);
                 }
                 //System.out.println(appointmentTimes);
@@ -304,6 +331,7 @@ public class LandingPage extends AppCompatActivity {
                 //onPostExecute(appointments);
                 return appointments;
             } catch (IOException e) {
+                System.out.println("exception");
                 e.printStackTrace();
             }
             return null;

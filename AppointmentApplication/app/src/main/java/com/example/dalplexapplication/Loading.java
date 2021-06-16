@@ -20,7 +20,8 @@ public class Loading  extends AppCompatActivity {
 
         Intent intent;
         if (username.equals("None")){
-            intent = new Intent(Loading.this, Login.class);
+            //Switch LandingPage to Login when login is implemented
+            intent = new Intent(Loading.this, LandingPage.class);
         }
         else{
             intent = new Intent(Loading.this, LandingPage.class);
