@@ -40,6 +40,7 @@ public class LandingPage extends AppCompatActivity {
     ArrayList<String> appointmentDates = new ArrayList<>();
     ArrayList<Appointment> appointments = new ArrayList<>();
 
+    final String channelName = "dalplexChannel";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +79,42 @@ public class LandingPage extends AppCompatActivity {
 
         AppointmentRetriever appt = new AppointmentRetriever();
         appt.execute();
+
+
+        createNotificationChannel();
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelName)
+                .setSmallIcon(R.drawable.running)
+                .setContentTitle("title")
+                .setContentText("desc")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+
+        // notificationId is a unique int for each notification that you must define
+        notificationManager.notify(0, builder.build());
+
     }
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "dalplexChannel";
+            String description = "channel for the dalplex";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("dalplexChannel", name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+
+
+
+
 
     public void createTable(ArrayList<Appointment> returnedAppointments){
         TableLayout table = (TableLayout) findViewById(R.id.AppointmentsTable);
