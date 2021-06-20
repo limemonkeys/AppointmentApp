@@ -83,7 +83,7 @@ public class FilterTimeMenu extends AppCompatActivity {
         int width = table.getLayoutParams().width;
 
         //Currently hardcoded as these time intervals shouldn't change
-        int numRows = 11 + 9;
+        int numRows = 19;
         newHeight = Math.max(((150 + 45) * numRows) + 45, height);
         //table.setLayoutParams(new TableLayout.LayoutParams(table.getLayoutParams().width, newHeight));
         System.out.println(newHeight);
@@ -115,11 +115,17 @@ public class FilterTimeMenu extends AppCompatActivity {
         timeslots.add("11:30 AM - 12:30 PM");
         timeslots.add("1:00 PM - 2:00 PM");
         timeslots.add("2:30 PM - 3:30 PM");
-        timeslots.add("4:00 PM - 5:00 PM");
-        timeslots.add("5:30 PM - 6:30 PM");
-        timeslots.add("7:00 PM - 8:00 PM");
+        timeslots.add("4:00 PM - 5:00 PM");;
 
-
+        /*
+        Sunday times
+        timeslots.add("9:00 AM - 10:00 AM");
+        timeslots.add("10:30 AM - 11:30 AM");
+        timeslots.add("12:00 PM - 1:00 PM");
+        timeslots.add("1:30 PM - 2:30 PM");
+        timeslots.add("3:00 PM - 4:00 PM");
+        timeslots.add("4:30 PM - 5:30 PM");
+         */
 
 
         for(String timeslot_name : timeslots){
