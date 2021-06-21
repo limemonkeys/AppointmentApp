@@ -19,6 +19,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.PowerManager;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
@@ -45,7 +46,10 @@ public class LandingPage extends AppCompatActivity {
     ArrayList<Appointment> appointments = new ArrayList<>();
     Runnable objRunnable;
 
-    private final static int INTERVAL = 1000 * 60 * 2; //2 minutes
+    //private final static int INTERVAL = 1000 * 60 * 2; //2 minutes
+
+    private final static int INTERVAL = 1000 * 10 * 1; //10 sec
+
 
     Handler objHandler = new Handler() {
         @Override
@@ -118,8 +122,15 @@ public class LandingPage extends AppCompatActivity {
 
             @Override
             public void run() {
-                createNotification();
+                PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+                boolean isScreenOn = pm.isScreenOn();
+                if (!isScreenOn){
+                    createNotification();
+                }
+
                 mHandler.postDelayed(objRunnable, INTERVAL);
+
+
 
                 objBundle.putString("AppointmentAvailabilityUpdate", "blah blah blah");
                 objMessage.setData(objBundle);
@@ -149,30 +160,6 @@ public class LandingPage extends AppCompatActivity {
         notificationManager.notify(0, builder.build());
     }
 
-    /*
-
-
-    Handler mHandler = new Handler();
-
-    Runnable mHandlerTask = new Runnable()
-    {
-        @Override
-        public void run() {
-            doSomething();
-            mHandler.postDelayed(mHandlerTask, INTERVAL);
-        }
-    };
-
-    void startRepeatingTask()
-    {
-        mHandlerTask.run();
-    }
-
-    void stopRepeatingTask()
-    {
-        mHandler.removeCallbacks(mHandlerTask);
-    }
-    */
     private void createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
@@ -188,11 +175,6 @@ public class LandingPage extends AppCompatActivity {
             notificationManager.createNotificationChannel(channel);
         }
     }
-
-
-
-
-
 
     public void createTable(ArrayList<Appointment> returnedAppointments){
         TableLayout table = (TableLayout) findViewById(R.id.AppointmentsTable);
