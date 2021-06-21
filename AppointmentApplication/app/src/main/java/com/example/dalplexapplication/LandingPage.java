@@ -122,21 +122,33 @@ public class LandingPage extends AppCompatActivity {
 
             @Override
             public void run() {
-                PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-                boolean isScreenOn = pm.isScreenOn();
-                if (!isScreenOn){
-                    createNotification();
+                try {
+                    PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+                    boolean isScreenOn = pm.isScreenOn();
+                    if (!isScreenOn){
+                        createNotification();
+                    }
                 }
+                catch (Exception e){
+                    e.getStackTrace();
+                }
+
+
+
 
                 mHandler.postDelayed(objRunnable, INTERVAL);
 
 
 
+                /*
+                Messages must be recycled to avoid crash:
+                https://stackoverflow.com/questions/44020010/this-message-cannot-be-recycled-because-it-is-still-in-use
+
                 objBundle.putString("AppointmentAvailabilityUpdate", "blah blah blah");
                 objMessage.setData(objBundle);
-
                 objHandler.sendMessage(objMessage);
-                //objHandler.sendEmptyMessage(0);
+                */
+
             }
         };
 
