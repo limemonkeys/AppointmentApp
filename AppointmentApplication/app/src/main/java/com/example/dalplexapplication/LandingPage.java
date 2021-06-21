@@ -1,9 +1,11 @@
 package com.example.dalplexapplication;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -15,6 +17,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
@@ -39,6 +43,21 @@ public class LandingPage extends AppCompatActivity {
     ArrayList<Integer> appointmentAvailablility = new ArrayList<>();
     ArrayList<String> appointmentDates = new ArrayList<>();
     ArrayList<Appointment> appointments = new ArrayList<>();
+    Runnable objRunnable;
+
+    private final static int INTERVAL = 1000 * 60 * 2; //2 minutes
+
+    Handler objHandler = new Handler() {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            Bundle objBundle = msg.getData();
+            String mymessage = objBundle.getString("AppointmentAvailabilityUpdate");
+
+            System.out.println(mymessage);
+        }
+    };
+
 
     final String channelName = "dalplexChannel";
 
@@ -77,24 +96,83 @@ public class LandingPage extends AppCompatActivity {
             }
         });
 
-        AppointmentRetriever appt = new AppointmentRetriever();
-        appt.execute();
+        //This pulls appointments
+        //AppointmentRetriever appt = new AppointmentRetriever();
+        //appt.execute();
 
 
+
+
+
+        //AppointmentRetriever appt = new AppointmentRetriever();
+        //appt.execute();
+        // notificationId is a unique int for each notification that you must define
+
+
+        Handler mHandler = new Handler();
+        objRunnable = new Runnable() {
+            Message objMessage = objHandler.obtainMessage();
+            Bundle objBundle = new Bundle();
+
+
+
+            @Override
+            public void run() {
+                createNotification();
+                mHandler.postDelayed(objRunnable, INTERVAL);
+
+                objBundle.putString("AppointmentAvailabilityUpdate", "blah blah blah");
+                objMessage.setData(objBundle);
+
+                objHandler.sendMessage(objMessage);
+                //objHandler.sendEmptyMessage(0);
+            }
+        };
+
+        //Thread objBgThread = new Thread(objRunnable);
+        //objBgThread.start();
+
+        objRunnable.run();
+
+
+    }
+
+    public void createNotification(){
         createNotificationChannel();
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelName)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), channelName)
                 .setSmallIcon(R.drawable.running)
                 .setContentTitle("title")
                 .setContentText("desc")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-
-        // notificationId is a unique int for each notification that you must define
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
         notificationManager.notify(0, builder.build());
-
     }
 
+    /*
+
+
+    Handler mHandler = new Handler();
+
+    Runnable mHandlerTask = new Runnable()
+    {
+        @Override
+        public void run() {
+            doSomething();
+            mHandler.postDelayed(mHandlerTask, INTERVAL);
+        }
+    };
+
+    void startRepeatingTask()
+    {
+        mHandlerTask.run();
+    }
+
+    void stopRepeatingTask()
+    {
+        mHandler.removeCallbacks(mHandlerTask);
+    }
+    */
     private void createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
