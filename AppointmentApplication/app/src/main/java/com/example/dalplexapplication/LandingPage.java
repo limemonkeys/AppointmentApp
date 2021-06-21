@@ -142,7 +142,6 @@ public class LandingPage extends AppCompatActivity {
 
                 /*
                 Messages must be recycled to avoid crash:
-                https://stackoverflow.com/questions/44020010/this-message-cannot-be-recycled-because-it-is-still-in-use
 
                 objBundle.putString("AppointmentAvailabilityUpdate", "blah blah blah");
                 objMessage.setData(objBundle);
