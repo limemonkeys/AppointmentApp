@@ -31,6 +31,7 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 public class LandingPage extends AppCompatActivity {
 
@@ -100,16 +101,16 @@ public class LandingPage extends AppCompatActivity {
 
                 // Refresh appointments
                 AppointmentRetriever appts = new AppointmentRetriever();
-                appts.execute();
-
-
-                System.out.println("begin" + appointments.equals(previousAppointments));
-                System.out.println(previousAppointments);
-                System.out.println(appointments);
+                try {
+                    appts.execute().get();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
                 // Compare fetched appointments to previously fetched appointments
                 // Checking for new openings for desired appointments (Cancelled full sessions)
-                System.out.println("begin" + appointments.equals(previousAppointments));
 
 
                 // Before checking for new appointments, ensure there is a history
@@ -119,17 +120,8 @@ public class LandingPage extends AppCompatActivity {
 
                     //Open test using this
                     //appointments.set(0, new Appointment(appointments.get(0).getDate(), appointments.get(0).getTime(), appointments.get(0).getAvailable() + 1));
-
-                    System.out.println(previousAppointments);
-                    System.out.println(appointments);
-                    System.out.println("check" + appointments.equals(previousAppointments));
-
                     for (Appointment appointment : appointments){
-                        System.out.println("---------------------");
-                        System.out.println(appointment);
-
                         for (Appointment previousAppointment : previousAppointments){
-                            System.out.println(previousAppointment);
                             if (appointment.getAvailable() != previousAppointment.getAvailable()){
                                 boolean preferredDate = dayPreferences.getString(appointment.getDate().split(",")[0], String.valueOf(false)).equals("true");
                                 boolean compareDates = previousAppointment.getDate().equals(appointment.getDate());
@@ -139,7 +131,6 @@ public class LandingPage extends AppCompatActivity {
                                     if (preferredTime && compareTime){
                                         if (!openedAppointments.contains(appointment)){
                                             openedAppointments.add(appointment);
-                                            System.out.println("found opened");
                                         }
                                     }
                                 }
@@ -158,7 +149,6 @@ public class LandingPage extends AppCompatActivity {
                             if (previousAppointments.stream().noneMatch(tempAppointment1 -> tempAppointment1.getDate().equals(appointment.getDate()))){
                                 if(!freshAppointments.contains(appointment)){
                                     freshAppointments.add(appointment);
-                                    System.out.println("found fresh");
                                 }
                             }
                             // Otherwise date already exists.
@@ -175,7 +165,6 @@ public class LandingPage extends AppCompatActivity {
                                 if (!existingTime){
                                     if(!freshAppointments.contains(appointment)){
                                         freshAppointments.add(appointment);
-                                        System.out.println("found fresh");
                                     }
                                 }
                             }
@@ -186,12 +175,10 @@ public class LandingPage extends AppCompatActivity {
 
 
                 if (!freshAppointments.isEmpty()){
-                    System.out.println("fresh");
                     createNotification(freshAppointments, "fresh");
                 }
 
                 if (!openedAppointments.isEmpty()){
-                    System.out.println("opened");
                     createNotification(openedAppointments, "opened");
                 }
                 HandlerRefresh.postDelayed(RunnableRefresh, INTERVAL);
@@ -226,7 +213,7 @@ public class LandingPage extends AppCompatActivity {
         if (intention.equals("opened")){
             builder = new NotificationCompat.Builder(getApplicationContext(), channelName2)
                     .setSmallIcon(R.drawable.running)
-                    .setContentTitle("Newly Opened Dalplex Appointments Available")
+                    .setContentTitle("New Dalplex Appointments Available")
                     .setStyle(new NotificationCompat.BigTextStyle()
                             .bigText(appointmentsString))
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT);
@@ -258,9 +245,18 @@ public class LandingPage extends AppCompatActivity {
     public void createTable(ArrayList<Appointment> returnedAppointments){
         TableLayout table = (TableLayout) findViewById(R.id.AppointmentsTable);
         int height = table.getLayoutParams().height;
+        int previousTableSize = table.getChildCount();
 
-        // TODO: First, clear any rows.
+        //table.removeAllViews();
 
+        System.out.println("--------------------------");
+        System.out.println("table.getChildCount()" + table.getChildCount());
+
+        System.out.println("///////");
+
+
+
+        System.out.println("--------------------------");
 
         SharedPreferences dayPreferences = getSharedPreferences("dayPreferences", 0);
         SharedPreferences timePreferences = getSharedPreferences("timePreferences", 0);
@@ -280,7 +276,7 @@ public class LandingPage extends AppCompatActivity {
             }
         }
 
-        int newHeight = Math.max(((200 + 45) * numRows) + 45, height);
+        int newHeight = Math.max(((200 + 45) * numRows), height);
 
         for (Appointment appointment : returnedAppointments){
             if (appointment.getAvailable() > 0){
@@ -295,6 +291,17 @@ public class LandingPage extends AppCompatActivity {
                 }
             }
         }
+
+        // After adding each row, remove each row previously there. removeAllViews() breaks list.
+        // Do not remove view at position 0. Note: Despite how it seem, the list completely updates
+        System.out.println("table.getChildAt(0): " + table.getChildAt(0));
+        for (int i = 0; i < previousTableSize; i++){
+            table.removeViewAt(1);
+        }
+
+
+
+        System.out.println(table.getChildCount());
     }
 
     public class AppointmentRetriever extends AsyncTask<Void, Void, ArrayList<Appointment>> {
@@ -350,6 +357,9 @@ public class LandingPage extends AppCompatActivity {
     }
 
     protected void addRow(int newHeight, Appointment appointment){
+
+        System.out.println("IN ADD ROW" + appointment);
+        System.out.println("newHeight" + newHeight);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
@@ -426,17 +436,4 @@ public class LandingPage extends AppCompatActivity {
         });
         table.addView(row, new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
     }
-    public static boolean isActivityVisible() {
-        return activityVisible;
-    }
-
-    public static void activityResumed() {
-        activityVisible = true;
-    }
-
-    public static void activityPaused() {
-        activityVisible = false;
-    }
-
-
 }
