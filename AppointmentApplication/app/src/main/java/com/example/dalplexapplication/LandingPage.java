@@ -1,15 +1,12 @@
 package com.example.dalplexapplication;
 
-import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-import android.annotation.SuppressLint;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -18,8 +15,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
-import android.os.PowerManager;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
@@ -44,36 +39,28 @@ public class LandingPage extends AppCompatActivity {
     ArrayList<Integer> appointmentAvailablility = new ArrayList<>();
     ArrayList<String> appointmentDates = new ArrayList<>();
     ArrayList<Appointment> appointments = new ArrayList<>();
-    Runnable objRunnable;
-
+    ArrayList<Appointment> previousAppointments = new ArrayList<>();
+    Runnable RunnableRefresh;
+    private static boolean activityVisible;
+    NotificationHandler objHandler;
     //private final static int INTERVAL = 1000 * 60 * 2; //2 minutes
-
-    private final static int INTERVAL = 1000 * 10 * 1; //10 sec
-
-
-    Handler objHandler = new Handler() {
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            super.handleMessage(msg);
-            Bundle objBundle = msg.getData();
-            String mymessage = objBundle.getString("AppointmentAvailabilityUpdate");
-
-            System.out.println(mymessage);
-        }
-    };
+    private final static int INTERVAL = 1000 * 60; //1 minute secs
+    ArrayList<Appointment> openedAppointments = new ArrayList<>();
+    ArrayList<Appointment> freshAppointments = new ArrayList<>();
 
 
-    final String channelName = "dalplexChannel";
+    final String channelName1 = "dalplexChannelNewAppointments";
+    final String channelName2 = "dalplexChannelFreshAppointments";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ImageView menuButton = (ImageView) findViewById(R.id.menuButton);
+        ImageView menuButton = findViewById(R.id.menuButton);
         menuButton.setColorFilter(Color.GRAY);
 
-        ImageView filterMenu = (ImageView) findViewById(R.id.filterMenu);
+        ImageView filterMenu = findViewById(R.id.filterMenu);
         filterMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,7 +69,7 @@ public class LandingPage extends AppCompatActivity {
             }
         });
 
-        ImageView settingsButton = (ImageView) findViewById(R.id.settingsButton);
+        ImageView settingsButton = findViewById(R.id.settingsButton);
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,7 +78,7 @@ public class LandingPage extends AppCompatActivity {
             }
         });
 
-        ImageView helpButton = (ImageView) findViewById(R.id.helpButton);
+        ImageView helpButton = findViewById(R.id.helpButton);
         helpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,96 +87,180 @@ public class LandingPage extends AppCompatActivity {
             }
         });
 
-        //This pulls appointments
-        //AppointmentRetriever appt = new AppointmentRetriever();
-        //appt.execute();
-
-
-
-
-
-        //AppointmentRetriever appt = new AppointmentRetriever();
-        //appt.execute();
-        // notificationId is a unique int for each notification that you must define
-
-
-        Handler mHandler = new Handler();
-        objRunnable = new Runnable() {
-            Message objMessage = objHandler.obtainMessage();
-            Bundle objBundle = new Bundle();
-
-
-
+        Handler HandlerRefresh = new Handler();
+        RunnableRefresh = new Runnable() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void run() {
-                try {
-                    PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-                    boolean isScreenOn = pm.isScreenOn();
-                    if (!isScreenOn){
-                        createNotification();
+                openedAppointments.clear();
+                freshAppointments.clear();
+
+                SharedPreferences dayPreferences = getSharedPreferences("dayPreferences", 0);
+                SharedPreferences timePreferences = getSharedPreferences("timePreferences", 0);
+
+                // Refresh appointments
+                AppointmentRetriever appts = new AppointmentRetriever();
+                appts.execute();
+
+
+                System.out.println("begin" + appointments.equals(previousAppointments));
+                System.out.println(previousAppointments);
+                System.out.println(appointments);
+
+                // Compare fetched appointments to previously fetched appointments
+                // Checking for new openings for desired appointments (Cancelled full sessions)
+                System.out.println("begin" + appointments.equals(previousAppointments));
+
+
+                // Before checking for new appointments, ensure there is a history
+                if (!previousAppointments.isEmpty()){
+                    //Fresh test using this.
+                    //appointments.add(new Appointment("Monday, June 28, 2021", "6:00 PM - 7:00 PM", 55));
+
+                    //Open test using this
+                    //appointments.set(0, new Appointment(appointments.get(0).getDate(), appointments.get(0).getTime(), appointments.get(0).getAvailable() + 1));
+
+                    System.out.println(previousAppointments);
+                    System.out.println(appointments);
+                    System.out.println("check" + appointments.equals(previousAppointments));
+
+                    for (Appointment appointment : appointments){
+                        System.out.println("---------------------");
+                        System.out.println(appointment);
+
+                        for (Appointment previousAppointment : previousAppointments){
+                            System.out.println(previousAppointment);
+                            if (appointment.getAvailable() != previousAppointment.getAvailable()){
+                                boolean preferredDate = dayPreferences.getString(appointment.getDate().split(",")[0], String.valueOf(false)).equals("true");
+                                boolean compareDates = previousAppointment.getDate().equals(appointment.getDate());
+                                if (preferredDate && compareDates){
+                                    boolean preferredTime = timePreferences.getString(appointment.getTime(), String.valueOf(false)).equals("true");
+                                    boolean compareTime = previousAppointment.getTime().equals(appointment.getTime());
+                                    if (preferredTime && compareTime){
+                                        if (!openedAppointments.contains(appointment)){
+                                            openedAppointments.add(appointment);
+                                            System.out.println("found opened");
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
+
+
+                    // Begin checking for newly opened appointments
+                    for (Appointment appointment : appointments){
+                        // First, check if date and time is preferred
+                        boolean preferredDate = dayPreferences.getString(appointment.getDate().split(",")[0], String.valueOf(false)).equals("true");
+                        boolean preferredTime = timePreferences.getString(appointment.getTime(), String.valueOf(false)).equals("true");
+                        if (preferredDate && preferredTime){
+                            // If there is a new day in the list, new appointments
+                            if (previousAppointments.stream().noneMatch(tempAppointment1 -> tempAppointment1.getDate().equals(appointment.getDate()))){
+                                if(!freshAppointments.contains(appointment)){
+                                    freshAppointments.add(appointment);
+                                    System.out.println("found fresh");
+                                }
+                            }
+                            // Otherwise date already exists.
+                            // Cycle through appointments looking for that day, then check if time exists.
+                            else{
+                                boolean existingTime = false;
+                                for (Appointment previousAppointment : previousAppointments){
+                                    if (appointment.getDate().equals(previousAppointment.getDate())){
+                                        if(appointment.getTime().equals(previousAppointment.getTime())){
+                                            existingTime = true;
+                                        }
+                                    }
+                                }
+                                if (!existingTime){
+                                    if(!freshAppointments.contains(appointment)){
+                                        freshAppointments.add(appointment);
+                                        System.out.println("found fresh");
+                                    }
+                                }
+                            }
+                        }
+                    }
+
                 }
-                catch (Exception e){
-                    e.getStackTrace();
+
+
+                if (!freshAppointments.isEmpty()){
+                    System.out.println("fresh");
+                    createNotification(freshAppointments, "fresh");
                 }
 
-
-
-
-                mHandler.postDelayed(objRunnable, INTERVAL);
-
-
-
-                /*
-                Messages must be recycled to avoid crash:
-
-                objBundle.putString("AppointmentAvailabilityUpdate", "blah blah blah");
-                objMessage.setData(objBundle);
-                objHandler.sendMessage(objMessage);
-                */
-
+                if (!openedAppointments.isEmpty()){
+                    System.out.println("opened");
+                    createNotification(openedAppointments, "opened");
+                }
+                HandlerRefresh.postDelayed(RunnableRefresh, INTERVAL);
             }
         };
-
-        //Thread objBgThread = new Thread(objRunnable);
-        //objBgThread.start();
-
-        objRunnable.run();
-
+        RunnableRefresh.run();
 
     }
 
-    public void createNotification(){
+    public void createNotification(ArrayList<Appointment> newAppointments, String intention){
+        StringBuilder appointmentsString = new StringBuilder();
+        for (Appointment appointment : newAppointments){
+            appointmentsString.append(appointment.getDate()).append(" ").append(appointment.getTime()).append("\n");
+        }
         createNotificationChannel();
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), channelName)
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), channelName2)
                 .setSmallIcon(R.drawable.running)
-                .setContentTitle("title")
-                .setContentText("desc")
+                .setContentTitle("No new appointments :(")
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(appointmentsString))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        if (intention.equals("fresh")){
+            builder = new NotificationCompat.Builder(getApplicationContext(), channelName1)
+                    .setSmallIcon(R.drawable.running)
+                    .setContentTitle("Fresh Dalplex Appointments Available")
+                    .setStyle(new NotificationCompat.BigTextStyle()
+                            .bigText(appointmentsString))
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        }
+        if (intention.equals("opened")){
+            builder = new NotificationCompat.Builder(getApplicationContext(), channelName2)
+                    .setSmallIcon(R.drawable.running)
+                    .setContentTitle("Newly Opened Dalplex Appointments Available")
+                    .setStyle(new NotificationCompat.BigTextStyle()
+                            .bigText(appointmentsString))
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        }
+
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
         notificationManager.notify(0, builder.build());
     }
 
     private void createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "dalplexChannel";
-            String description = "channel for the dalplex";
+            CharSequence name1 = "dalplexChannelNewAppointments";
+            CharSequence name2 = "dalplexChannelFreshAppointments";
+            String description1 = "Channel for the dalplex's new appointments";
+            String description2 = "Channel for the dalplex's fresh appointments";
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel("dalplexChannel", name, importance);
-            channel.setDescription(description);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
+            NotificationChannel channel1 = new NotificationChannel("dalplexChannelNewAppointments", name1, importance);
+            NotificationChannel channel2 = new NotificationChannel("dalplexChannelFreshAppointments", name2, importance);
+            channel1.setDescription(description1);
+            channel2.setDescription(description2);
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
+            notificationManager.createNotificationChannel(channel1);
+            notificationManager.createNotificationChannel(channel2);
         }
     }
 
     public void createTable(ArrayList<Appointment> returnedAppointments){
         TableLayout table = (TableLayout) findViewById(R.id.AppointmentsTable);
         int height = table.getLayoutParams().height;
+
+        // TODO: First, clear any rows.
+
 
         SharedPreferences dayPreferences = getSharedPreferences("dayPreferences", 0);
         SharedPreferences timePreferences = getSharedPreferences("timePreferences", 0);
@@ -234,6 +305,14 @@ public class LandingPage extends AppCompatActivity {
                 String url = "https://www.dalsports.dal.ca/Program/GetProgramDetails?courseId=8993d840-c85b-4afb-b8a9-3c30b3c16817&semesterId=cefa4d21-6d59-4e72-81b8-7d66b8843351";
                 Document doc = Jsoup.connect(url).get();
                 Elements byClass = doc.getElementsByClass("caption program-schedule-card-caption");
+
+                appointmentAvailablility.clear();
+                appointmentDates.clear();
+                appointmentTimes.clear();
+
+                previousAppointments.clear();
+                previousAppointments.addAll(appointments);
+                appointments.clear();
 
                 for (Element appointment : byClass){
                     String temp = appointment.getElementsByTag("small").text();
@@ -347,29 +426,17 @@ public class LandingPage extends AppCompatActivity {
         });
         table.addView(row, new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
     }
+    public static boolean isActivityVisible() {
+        return activityVisible;
+    }
+
+    public static void activityResumed() {
+        activityVisible = true;
+    }
+
+    public static void activityPaused() {
+        activityVisible = false;
+    }
+
+
 }
-
-/*
-    System.out.println("-------DAY PREFERENCES---------");
-    System.out.println(dayPreferences.getString("Monday", String.valueOf(false)).equals("true"));
-    System.out.println(dayPreferences.getString("Tuesday", String.valueOf(false)).equals("true"));
-    System.out.println(dayPreferences.getString("Wednesday", String.valueOf(false)).equals("true"));
-    System.out.println(dayPreferences.getString("Thursday", String.valueOf(false)).equals("true"));
-    System.out.println(dayPreferences.getString("Friday", String.valueOf(false)).equals("true"));
-    System.out.println(dayPreferences.getString("Saturday", String.valueOf(false)).equals("true"));
-    System.out.println(dayPreferences.getString("Sunday", String.valueOf(false)).equals("true"));
-
-    System.out.println();
-
-    System.out.println("-------Time PREFERENCES---------");
-    System.out.println(dayPreferences.getString("6:00 AM - 7:00 AM", String.valueOf(false)).equals("true"));
-    System.out.println(dayPreferences.getString("7:30 AM - 8:30 AM", String.valueOf(false)).equals("true"));
-    System.out.println(dayPreferences.getString("9:00 AM - 10:00 AM", String.valueOf(false)).equals("true"));
-    System.out.println(dayPreferences.getString("10:30 AM - 11:30 AM", String.valueOf(false)).equals("true"));
-    System.out.println(dayPreferences.getString("12:00 PM - 1:00 PM", String.valueOf(false)).equals("true"));
-    System.out.println(dayPreferences.getString("1:30 PM - 2:30 PM", String.valueOf(false)).equals("true"));
-    System.out.println(dayPreferences.getString("3:00 PM - 4:00 PM", String.valueOf(false)).equals("true"));
-    System.out.println(dayPreferences.getString("4:30 PM - 5:30 PM", String.valueOf(false)).equals("true"));
-    System.out.println(dayPreferences.getString("6:00 PM - 7:00 PM", String.valueOf(false)).equals("true"));
-    System.out.println(dayPreferences.getString("7:30 PM - 8:30 PM", String.valueOf(false)).equals("true"));
- */
