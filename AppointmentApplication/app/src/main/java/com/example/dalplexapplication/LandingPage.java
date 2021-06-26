@@ -43,7 +43,6 @@ public class LandingPage extends AppCompatActivity {
     ArrayList<Appointment> previousAppointments = new ArrayList<>();
     Runnable RunnableRefresh;
     private static boolean activityVisible;
-    NotificationHandler objHandler;
     //private final static int INTERVAL = 1000 * 60 * 2; //2 minutes
     private final static int INTERVAL = 500 * 60; //30 minute secs
     ArrayList<Appointment> openedAppointments = new ArrayList<>();
@@ -119,9 +118,14 @@ public class LandingPage extends AppCompatActivity {
 
                     //Open test using this
                     //appointments.set(0, new Appointment(appointments.get(0).getDate(), appointments.get(0).getTime(), appointments.get(0).getAvailable() + 1));
+
+                    //Open test using this
+                    //appointments.set(0, new Appointment(appointments.get(0).getDate(), appointments.get(0).getTime(), 1));
+                    //previousAppointments.set(0, new Appointment(appointments.get(0).getDate(), appointments.get(0).getTime(), 0));
+
                     for (Appointment appointment : appointments){
                         for (Appointment previousAppointment : previousAppointments){
-                            if (appointment.getAvailable() != previousAppointment.getAvailable()){
+                            if (appointment.getAvailable() > 0 && previousAppointment.getAvailable() == 0){
                                 boolean preferredDate = dayPreferences.getString(appointment.getDate().split(",")[0], String.valueOf(false)).equals("true");
                                 boolean compareDates = previousAppointment.getDate().equals(appointment.getDate());
                                 if (preferredDate && compareDates){
@@ -199,7 +203,7 @@ public class LandingPage extends AppCompatActivity {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), channelName2)
                 .setSmallIcon(R.drawable.running)
-                .setContentTitle("No new appointments :(")
+                .setContentTitle("Please contact developer!")
                 .setStyle(new NotificationCompat.BigTextStyle()
                         .bigText(appointmentsString))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
@@ -207,7 +211,7 @@ public class LandingPage extends AppCompatActivity {
         if (intention.equals("fresh")){
             builder = new NotificationCompat.Builder(getApplicationContext(), channelName1)
                     .setSmallIcon(R.drawable.running)
-                    .setContentTitle("Fresh Dalplex Appointments Available")
+                    .setContentTitle("Freshly Created Dalplex Appointments Available:")
                     .setStyle(new NotificationCompat.BigTextStyle()
                             .bigText(appointmentsString))
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT);
@@ -215,7 +219,7 @@ public class LandingPage extends AppCompatActivity {
         if (intention.equals("opened")){
             builder = new NotificationCompat.Builder(getApplicationContext(), channelName2)
                     .setSmallIcon(R.drawable.running)
-                    .setContentTitle("New Dalplex Appointments Available")
+                    .setContentTitle("Previously Occupied Dalplex Appointments Available:")
                     .setStyle(new NotificationCompat.BigTextStyle()
                             .bigText(appointmentsString))
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT);
