@@ -35,7 +35,8 @@ public class FilterDayMenu extends AppCompatActivity {
         ImageView filterMenu = (ImageView) findViewById(R.id.filterMenu);
         filterMenu.setColorFilter(Color.GRAY);
 
-        tableWidth = findViewById(R.id.AppointmentsTable).getLayoutParams().width;
+        TableLayout table = (TableLayout) findViewById(R.id.AppointmentsTable);
+        tableWidth = table.getLayoutParams().width;
 
         ImageView menuButton = (ImageView) findViewById(R.id.menuButton);
         menuButton.setOnClickListener(new View.OnClickListener() {
@@ -55,12 +56,11 @@ public class FilterDayMenu extends AppCompatActivity {
             }
         });
 
-        TableLayout table = (TableLayout) findViewById(R.id.AppointmentsTable);
         int height = table.getLayoutParams().height;
-        int width = table.getLayoutParams().width;
 
         //Hardcoded as there should always be 7 days in a week
         int numRows = 7;
+
         newHeight = Math.max(((150 + 45) * numRows) + 45, height);
 
         dayPreferences = getSharedPreferences("dayPreferences", MODE_PRIVATE);

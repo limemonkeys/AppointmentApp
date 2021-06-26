@@ -59,7 +59,7 @@ public class FilterTimeMenu extends AppCompatActivity {
         int width = table.getLayoutParams().width;
 
         //Currently hardcoded as these time intervals shouldn't change
-        int numRows = 19;
+        int numRows = 17;
         newHeight = Math.max(((150 + 45) * numRows) + 45, height);
         System.out.println(newHeight);
 
