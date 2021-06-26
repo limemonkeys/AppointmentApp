@@ -15,9 +15,7 @@
         <activity android:name=".FilterMenu" />
         <activity android:name=".FilterDayMenu" />
         <activity android:name=".FilterTimeMenu" />
-        <activity android:name=".LandingPage" />
-        <activity android:name=".Login" />
-        <activity android:name=".Loading">
+        <activity android:name=".LandingPage">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

@@ -45,7 +45,7 @@ public class LandingPage extends AppCompatActivity {
     private static boolean activityVisible;
     NotificationHandler objHandler;
     //private final static int INTERVAL = 1000 * 60 * 2; //2 minutes
-    private final static int INTERVAL = 1000 * 60; //1 minute secs
+    private final static int INTERVAL = 500 * 60; //30 minute secs
     ArrayList<Appointment> openedAppointments = new ArrayList<>();
     ArrayList<Appointment> freshAppointments = new ArrayList<>();
 
@@ -112,7 +112,6 @@ public class LandingPage extends AppCompatActivity {
                 // Compare fetched appointments to previously fetched appointments
                 // Checking for new openings for desired appointments (Cancelled full sessions)
 
-
                 // Before checking for new appointments, ensure there is a history
                 if (!previousAppointments.isEmpty()){
                     //Fresh test using this.
@@ -176,10 +175,13 @@ public class LandingPage extends AppCompatActivity {
 
                 if (!freshAppointments.isEmpty()){
                     createNotification(freshAppointments, "fresh");
+                    System.out.println("FRESH");
                 }
 
                 if (!openedAppointments.isEmpty()){
                     createNotification(openedAppointments, "opened");
+                    System.out.println("OPENED");
+
                 }
                 HandlerRefresh.postDelayed(RunnableRefresh, INTERVAL);
             }
@@ -247,17 +249,6 @@ public class LandingPage extends AppCompatActivity {
         int height = table.getLayoutParams().height;
         int previousTableSize = table.getChildCount();
 
-        //table.removeAllViews();
-
-        System.out.println("--------------------------");
-        System.out.println("table.getChildCount()" + table.getChildCount());
-
-        System.out.println("///////");
-
-
-
-        System.out.println("--------------------------");
-
         SharedPreferences dayPreferences = getSharedPreferences("dayPreferences", 0);
         SharedPreferences timePreferences = getSharedPreferences("timePreferences", 0);
 
@@ -294,14 +285,9 @@ public class LandingPage extends AppCompatActivity {
 
         // After adding each row, remove each row previously there. removeAllViews() breaks list.
         // Do not remove view at position 0. Note: Despite how it seem, the list completely updates
-        System.out.println("table.getChildAt(0): " + table.getChildAt(0));
         for (int i = 0; i < previousTableSize; i++){
             table.removeViewAt(1);
         }
-
-
-
-        System.out.println(table.getChildCount());
     }
 
     public class AppointmentRetriever extends AsyncTask<Void, Void, ArrayList<Appointment>> {
@@ -357,9 +343,6 @@ public class LandingPage extends AppCompatActivity {
     }
 
     protected void addRow(int newHeight, Appointment appointment){
-
-        System.out.println("IN ADD ROW" + appointment);
-        System.out.println("newHeight" + newHeight);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 

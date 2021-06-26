@@ -29,17 +29,11 @@ public class FilterTimeMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
 
-        ImageView menuButton = (ImageView) findViewById(R.id.menuButton);
+        ImageView menuButton = findViewById(R.id.menuButton);
         tableWidth = findViewById(R.id.AppointmentsTable).getLayoutParams().width;
         menuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
-                Uri uri = Uri.parse("https://www.dalsports.dal.ca/Program/GetProgramDetails?courseId=8993d840-c85b-4afb-b8a9-3c30b3c16817&semesterId=cefa4d21-6d59-4e72-81b8-7d66b8843351#"); // missing 'http://' will cause crashed
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(intent);
-
-                 */
                 Intent intent = new Intent(FilterTimeMenu.this, LandingPage.class);
                 startActivity(intent);
             }
@@ -52,12 +46,6 @@ public class FilterTimeMenu extends AppCompatActivity {
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
-                Uri uri = Uri.parse("https://www.dalsports.dal.ca/Program/GetProgramDetails?courseId=8993d840-c85b-4afb-b8a9-3c30b3c16817&semesterId=cefa4d21-6d59-4e72-81b8-7d66b8843351#"); // missing 'http://' will cause crashed
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(intent);
-
-                 */
                 Intent intent = new Intent(FilterTimeMenu.this, SettingsMenu.class);
                 startActivity(intent);
             }
@@ -67,12 +55,6 @@ public class FilterTimeMenu extends AppCompatActivity {
         helpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
-                Uri uri = Uri.parse("https://www.dalsports.dal.ca/Program/GetProgramDetails?courseId=8993d840-c85b-4afb-b8a9-3c30b3c16817&semesterId=cefa4d21-6d59-4e72-81b8-7d66b8843351#"); // missing 'http://' will cause crashed
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(intent);
-
-                 */
                 Intent intent = new Intent(FilterTimeMenu.this, HelpMenu.class);
                 startActivity(intent);
             }
@@ -85,18 +67,13 @@ public class FilterTimeMenu extends AppCompatActivity {
         //Currently hardcoded as these time intervals shouldn't change
         int numRows = 19;
         newHeight = Math.max(((150 + 45) * numRows) + 45, height);
-        //table.setLayoutParams(new TableLayout.LayoutParams(table.getLayoutParams().width, newHeight));
         System.out.println(newHeight);
 
         timePreferences = getSharedPreferences("timePreferences", MODE_PRIVATE);
 
-        // Get saved variables
-        // NOTE: the int is a mode. Not a unique number
         ArrayList<String> timeslots = new ArrayList<>();
 
-        // TODO: Implement flexible times (not hardcoded)
-        // No more 9 to 10 pm appts
-        // As of reopening after third wave, Dalplex has special times for the weekend
+        // All other day's intervals
         timeslots.add("6:00 AM - 7:00 AM");
         timeslots.add("7:30 AM - 8:30 AM");
         timeslots.add("9:00 AM - 10:00 AM");
@@ -108,7 +85,7 @@ public class FilterTimeMenu extends AppCompatActivity {
         timeslots.add("6:00 PM - 7:00 PM");
         timeslots.add("7:30 PM - 8:30 PM");
 
-        // Saturday times
+        // Specifically Saturday's times intervals
         timeslots.add("7:00 AM - 8:00 AM");
         timeslots.add("8:30 AM - 9:30 AM");
         timeslots.add("10:00 AM - 11:00 AM");
@@ -117,36 +94,21 @@ public class FilterTimeMenu extends AppCompatActivity {
         timeslots.add("2:30 PM - 3:30 PM");
         timeslots.add("4:00 PM - 5:00 PM");;
 
-        /*
-        Sunday times
-        timeslots.add("9:00 AM - 10:00 AM");
-        timeslots.add("10:30 AM - 11:30 AM");
-        timeslots.add("12:00 PM - 1:00 PM");
-        timeslots.add("1:30 PM - 2:30 PM");
-        timeslots.add("3:00 PM - 4:00 PM");
-        timeslots.add("4:30 PM - 5:30 PM");
-         */
-
-
         for(String timeslot_name : timeslots){
             addRow(timeslot_name);
         }
     }
 
     public void addRow(String time){
-
-        System.out.println(newHeight);
         TableLayout table = (TableLayout) findViewById(R.id.AppointmentsTable);
 
         int height = table.getLayoutParams().height;
         int width = table.getLayoutParams().width;
 
-
         TableRow row = new TableRow(this);
 
         row.setPadding(15,45,15,0);
         table.setLayoutParams(new TableLayout.LayoutParams(table.getLayoutParams().width, newHeight));
-
 
         TextView filterText = new TextView(this);
         Switch filterSwitch = new Switch(this);
@@ -154,11 +116,6 @@ public class FilterTimeMenu extends AppCompatActivity {
 
         filterText.setTextColor(Color.parseColor("#000000"));
         filterSwitch.setTextColor(Color.parseColor("#000000"));
-
-        /*
-        filterText.setBackgroundColor(Color.parseColor("#F2F197"));
-        filterSwitch.setBackgroundColor(Color.parseColor("#F2F197"));
-         */
 
         Typeface typeface = ResourcesCompat.getFont(this, R.font.fugaz_one);
         filterText.setTypeface(typeface);
@@ -186,7 +143,6 @@ public class FilterTimeMenu extends AppCompatActivity {
         filterText.setMinHeight(150);
         filterSwitch.setMinHeight(150);
 
-
         filterText.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
         filterSwitch.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
 
@@ -195,23 +151,16 @@ public class FilterTimeMenu extends AppCompatActivity {
 
 
         timePreferences = getSharedPreferences("timePreferences", MODE_PRIVATE);
-        //Boolean.getValue(...) doesn't work
+
+        //Note: Boolean.getValue(...) doesn't work
         filterSwitch.setChecked(timePreferences.getString(time, String.valueOf(false)).equals("true"));
 
         filterSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //System.out.println("-------------------");
                 timePreferences = getSharedPreferences("timePreferences", 0);
-                //System.out.println("filterSwitch.isChecked(): " + filterSwitch.isChecked());
-                //System.out.println("new get: " + timePreferences.getString(day, String.valueOf(false)));
-                System.out.println(time);
                 SharedPreferences.Editor editPreference = timePreferences.edit();
                 editPreference.putString(time, String.valueOf(filterSwitch.isChecked())).commit();
-                //timePreferences = getSharedPreferences("timePreferences", 0);
-                //System.out.println("filterSwitch.isChecked(): " + filterSwitch.isChecked());
-                //System.out.println("new get: " + timePreferences.getString(day, String.valueOf(false)));
-
             }
         });
 

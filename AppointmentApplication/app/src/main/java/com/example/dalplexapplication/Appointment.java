@@ -22,14 +22,5 @@ public class Appointment {
     public String getTime() {
         return time;
     }
-
-    @Override
-    public String toString() {
-        return "Appointment{" +
-                "date='" + date + '\'' +
-                ", time='" + time + '\'' +
-                ", available='" + String.valueOf(available) + '\'' +
-                '}';
-    }
 }
 

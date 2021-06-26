@@ -23,49 +23,31 @@ public class FilterMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
 
-        ImageView menuButton = (ImageView) findViewById(R.id.menuButton);
+        ImageView menuButton = findViewById(R.id.menuButton);
         menuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
-                Uri uri = Uri.parse("https://www.dalsports.dal.ca/Program/GetProgramDetails?courseId=8993d840-c85b-4afb-b8a9-3c30b3c16817&semesterId=cefa4d21-6d59-4e72-81b8-7d66b8843351#"); // missing 'http://' will cause crashed
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(intent);
-
-                 */
                 Intent intent = new Intent(FilterMenu.this, LandingPage.class);
                 startActivity(intent);
             }
         });
 
-        ImageView filterMenu = (ImageView) findViewById(R.id.filterMenu);
+        ImageView filterMenu = findViewById(R.id.filterMenu);
         filterMenu.setColorFilter(Color.GRAY);
 
         ImageView settingsButton = (ImageView) findViewById(R.id.settingsButton);
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
-                Uri uri = Uri.parse("https://www.dalsports.dal.ca/Program/GetProgramDetails?courseId=8993d840-c85b-4afb-b8a9-3c30b3c16817&semesterId=cefa4d21-6d59-4e72-81b8-7d66b8843351#"); // missing 'http://' will cause crashed
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(intent);
-
-                 */
                 Intent intent = new Intent(FilterMenu.this, SettingsMenu.class);
                 startActivity(intent);
             }
         });
 
-        ImageView helpButton = (ImageView) findViewById(R.id.helpButton);
+        ImageView helpButton = findViewById(R.id.helpButton);
         helpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
-                Uri uri = Uri.parse("https://www.dalsports.dal.ca/Program/GetProgramDetails?courseId=8993d840-c85b-4afb-b8a9-3c30b3c16817&semesterId=cefa4d21-6d59-4e72-81b8-7d66b8843351#"); // missing 'http://' will cause crashed
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(intent);
-
-                 */
                 Intent intent = new Intent(FilterMenu.this, HelpMenu.class);
                 startActivity(intent);
             }
@@ -75,14 +57,10 @@ public class FilterMenu extends AppCompatActivity {
         TableLayout table = (TableLayout) findViewById(R.id.AppointmentsTable);
         addRow("Filter by Days", "FilterDayMenu");
         addRow("Filter by Time", "FilterTimeMenu");
-
     }
 
     public void addRow(String text, String FilterType){
-
-
         TableLayout table = (TableLayout) findViewById(R.id.AppointmentsTable);
-        int height = table.getLayoutParams().height;
         int width = table.getLayoutParams().width;
 
         TableRow row = new TableRow(this);
@@ -91,13 +69,7 @@ public class FilterMenu extends AppCompatActivity {
 
         TextView filterText = new TextView(this);
 
-
         filterText.setTextColor(Color.parseColor("#000000"));
-
-        /*
-        filterText.setBackgroundColor(Color.parseColor("#F2F197"));
-        filterSwitch.setBackgroundColor(Color.parseColor("#F2F197"));
-         */
 
         Typeface typeface = ResourcesCompat.getFont(this, R.font.fugaz_one);
         filterText.setTypeface(typeface);
