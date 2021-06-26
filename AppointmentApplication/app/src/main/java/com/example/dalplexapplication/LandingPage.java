@@ -69,11 +69,11 @@ public class LandingPage extends AppCompatActivity {
             }
         });
 
-        ImageView settingsButton = findViewById(R.id.settingsButton);
+        ImageView settingsButton = findViewById(R.id.refreshButton);
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LandingPage.this, SettingsMenu.class);
+                Intent intent = new Intent(LandingPage.this, LandingPage.class);
                 startActivity(intent);
             }
         });

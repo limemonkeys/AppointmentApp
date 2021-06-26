@@ -15,6 +15,12 @@ public class HelpMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);
 
+        ImageView helpButton = (ImageView) findViewById(R.id.helpButton);
+        helpButton.setColorFilter(Color.GRAY);
+
+        ImageView refreshButton = (ImageView) findViewById(R.id.refreshButton);
+        refreshButton.setColorFilter(Color.GRAY);
+
         ImageView menuButton = findViewById(R.id.menuButton);
         menuButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -32,16 +38,5 @@ public class HelpMenu extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        ImageView settingsButton = findViewById(R.id.settingsButton);
-        settingsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(HelpMenu.this, SettingsMenu.class);
-                startActivity(intent);
-            }
-        });
-        ImageView helpButton = (ImageView) findViewById(R.id.helpButton);
-        helpButton.setColorFilter(Color.GRAY);
     }
 }

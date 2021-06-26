@@ -29,24 +29,18 @@ public class FilterTimeMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
 
+        ImageView filterMenu = (ImageView) findViewById(R.id.filterMenu);
+        filterMenu.setColorFilter(Color.GRAY);
+
+        ImageView refreshButton = (ImageView) findViewById(R.id.refreshButton);
+        refreshButton.setColorFilter(Color.GRAY);
+
         ImageView menuButton = findViewById(R.id.menuButton);
         tableWidth = findViewById(R.id.AppointmentsTable).getLayoutParams().width;
         menuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(FilterTimeMenu.this, LandingPage.class);
-                startActivity(intent);
-            }
-        });
-
-        ImageView filterMenu = (ImageView) findViewById(R.id.filterMenu);
-        filterMenu.setColorFilter(Color.GRAY);
-
-        ImageView settingsButton = (ImageView) findViewById(R.id.settingsButton);
-        settingsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(FilterTimeMenu.this, SettingsMenu.class);
                 startActivity(intent);
             }
         });

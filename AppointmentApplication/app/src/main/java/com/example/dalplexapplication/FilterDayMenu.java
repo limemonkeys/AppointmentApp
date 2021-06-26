@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -30,6 +29,12 @@ public class FilterDayMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
 
+        ImageView refreshButton = (ImageView) findViewById(R.id.refreshButton);
+        refreshButton.setColorFilter(Color.GRAY);
+
+        ImageView filterMenu = (ImageView) findViewById(R.id.filterMenu);
+        filterMenu.setColorFilter(Color.GRAY);
+
         tableWidth = findViewById(R.id.AppointmentsTable).getLayoutParams().width;
 
         ImageView menuButton = (ImageView) findViewById(R.id.menuButton);
@@ -41,28 +46,10 @@ public class FilterDayMenu extends AppCompatActivity {
             }
         });
 
-        ImageView filterMenu = (ImageView) findViewById(R.id.filterMenu);
-        filterMenu.setColorFilter(Color.GRAY);
-
-        ImageView settingsButton = (ImageView) findViewById(R.id.settingsButton);
-        settingsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(FilterDayMenu.this, SettingsMenu.class);
-                startActivity(intent);
-            }
-        });
-
         ImageView helpButton = (ImageView) findViewById(R.id.helpButton);
         helpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
-                Uri uri = Uri.parse("https://www.dalsports.dal.ca/Program/GetProgramDetails?courseId=8993d840-c85b-4afb-b8a9-3c30b3c16817&semesterId=cefa4d21-6d59-4e72-81b8-7d66b8843351#"); // missing 'http://' will cause crashed
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(intent);
-
-                 */
                 Intent intent = new Intent(FilterDayMenu.this, HelpMenu.class);
                 startActivity(intent);
             }
