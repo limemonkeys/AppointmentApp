@@ -212,7 +212,7 @@ public class LandingPage extends AppCompatActivity {
         createNotificationChannel();
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), channelName2)
-                .setSmallIcon(R.drawable.running)
+                .setSmallIcon(R.drawable.ic_stat_name)
                 .setContentTitle("Please contact developer!")
                 .setStyle(new NotificationCompat.BigTextStyle()
                         .bigText(appointmentsString))
@@ -220,7 +220,7 @@ public class LandingPage extends AppCompatActivity {
 
         if (intention.equals("fresh")){
             builder = new NotificationCompat.Builder(getApplicationContext(), channelName1)
-                    .setSmallIcon(R.drawable.running)
+                    .setSmallIcon(R.drawable.ic_stat_name)
                     .setContentTitle("Freshly Created Dalplex Appointments Available:")
                     .setStyle(new NotificationCompat.BigTextStyle()
                             .bigText(appointmentsString))
@@ -228,7 +228,7 @@ public class LandingPage extends AppCompatActivity {
         }
         if (intention.equals("opened")){
             builder = new NotificationCompat.Builder(getApplicationContext(), channelName2)
-                    .setSmallIcon(R.drawable.running)
+                    .setSmallIcon(R.drawable.ic_stat_name)
                     .setContentTitle("Previously Occupied Dalplex Appointments Available:")
                     .setStyle(new NotificationCompat.BigTextStyle()
                             .bigText(appointmentsString))
