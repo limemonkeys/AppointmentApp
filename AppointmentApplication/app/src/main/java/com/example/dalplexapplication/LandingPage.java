@@ -4,12 +4,14 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.res.ResourcesCompat;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -101,6 +103,7 @@ public class LandingPage extends AppCompatActivity {
                 // Refresh appointments
                 AppointmentRetriever appts = new AppointmentRetriever();
                 try {
+                    // Refill table
                     appts.execute().get();
                 } catch (ExecutionException e) {
                     e.printStackTrace();
@@ -271,7 +274,7 @@ public class LandingPage extends AppCompatActivity {
             }
         }
 
-        int newHeight = Math.max(((200 + 45) * numRows), height);
+        int newHeight = Math.max(((195 + 45) * numRows) + 45, height);
 
         for (Appointment appointment : returnedAppointments){
             if (appointment.getAvailable() > 0){
@@ -390,7 +393,7 @@ public class LandingPage extends AppCompatActivity {
 
         appointmentDay.setMaxHeight(150);
         appointmentTime.setMaxHeight(150);
-        appointmentAvailablility.setMaxHeight(150);
+        //appointmentAvailablility.setMaxHeight(150);
 
         appointmentDay.setMinHeight(150);
         appointmentTime.setMinHeight(150);
@@ -405,9 +408,18 @@ public class LandingPage extends AppCompatActivity {
         String textTime = appointment.getTime().replace(" - ", "-\n");
         String textAvailablility = String.valueOf(appointment.getAvailable()) + " appt(s)";
 
+        appointmentDay.setTextColor(Color.BLACK);
+        appointmentTime.setTextColor(Color.BLACK);
+        appointmentAvailablility.setTextColor(Color.BLACK);
+
         appointmentDay.setText(textDay);
         appointmentTime.setText(textTime);
         appointmentAvailablility.setText(textAvailablility);
+
+        appointmentDay.setTextSize(16.0f);
+        appointmentTime.setTextSize(16.0f);
+        appointmentAvailablility.setTextSize(16.0f);
+
 
         row.addView(appointmentDay);
         row.addView(appointmentTime);
@@ -421,6 +433,9 @@ public class LandingPage extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        System.out.println(row.getHeight());
+
         table.addView(row, new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
     }
 }
