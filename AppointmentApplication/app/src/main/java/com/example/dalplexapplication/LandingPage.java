@@ -126,6 +126,9 @@ public class LandingPage extends AppCompatActivity {
                     //appointments.set(0, new Appointment(appointments.get(0).getDate(), appointments.get(0).getTime(), 1));
                     //previousAppointments.set(0, new Appointment(appointments.get(0).getDate(), appointments.get(0).getTime(), 0));
 
+                    //appointments.set(1, new Appointment(appointments.get(1).getDate(), appointments.get(1).getTime(), 1));
+                    //previousAppointments.set(1, new Appointment(appointments.get(1).getDate(), appointments.get(1).getTime(), 0));
+
                     for (Appointment appointment : appointments){
                         for (Appointment previousAppointment : previousAppointments){
                             if (appointment.getAvailable() > 0 && previousAppointment.getAvailable() == 0){
@@ -200,8 +203,12 @@ public class LandingPage extends AppCompatActivity {
     public void createNotification(ArrayList<Appointment> newAppointments, String intention){
         StringBuilder appointmentsString = new StringBuilder();
         for (Appointment appointment : newAppointments){
-            appointmentsString.append(appointment.getDate()).append(" ").append(appointment.getTime()).append("\n");
+            appointmentsString.append(appointment.getDate()).append(" ").append(appointment.getTime());
+            if (!appointment.equals(newAppointments.get(newAppointments.size() - 1))){
+                appointmentsString.append("\n");
+            }
         }
+
         createNotificationChannel();
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), channelName2)
@@ -406,7 +413,7 @@ public class LandingPage extends AppCompatActivity {
         String textDay = appointment.getDate().replace(", ", "\n");
 
         String textTime = appointment.getTime().replace(" - ", "-\n");
-        String textAvailablility = String.valueOf(appointment.getAvailable()) + " appt(s)";
+        String textAvailability = String.valueOf(appointment.getAvailable()) + " appt(s)";
 
         appointmentDay.setTextColor(Color.BLACK);
         appointmentTime.setTextColor(Color.BLACK);
@@ -414,7 +421,7 @@ public class LandingPage extends AppCompatActivity {
 
         appointmentDay.setText(textDay);
         appointmentTime.setText(textTime);
-        appointmentAvailablility.setText(textAvailablility);
+        appointmentAvailablility.setText(textAvailability);
 
         appointmentDay.setTextSize(16.0f);
         appointmentTime.setTextSize(16.0f);
