@@ -10,7 +10,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DalplexApplication">
-        <activity android:name=".SettingsMenu" />
         <activity android:name=".HelpMenu" />
         <activity android:name=".FilterMenu" />
         <activity android:name=".FilterDayMenu" />
