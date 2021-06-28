@@ -20,7 +20,7 @@
         android:background="@drawable/rounded_corners"
         android:fontFamily="@font/fugaz_one"
         android:gravity="center|center_horizontal|center_vertical"
-        android:text="Dalplex Fitness Hall"
+        android:text="Dalplex Appointments"
         android:textColor="#000000"
         android:textSize="48sp"
         app:layout_constraintBottom_toBottomOf="parent"

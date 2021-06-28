@@ -10,6 +10,7 @@ import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -28,6 +29,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.jsoup.select.Evaluator;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,7 +52,6 @@ public class LandingPage extends AppCompatActivity {
     private final static int REFRESH_INTERVAL = 500 * 60;
     final String channelName1 = "dalplexChannelFreshAppointments";
     final String channelName2 = "dalplexChannelNewAppointments";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +89,11 @@ public class LandingPage extends AppCompatActivity {
             }
         });
 
+        // Adding header value in table.
+        // Removing position 0 makes listings invisible, this is one reason header is a row.
+        TableLayout table = (TableLayout) findViewById(R.id.AppointmentsTable);
+        addRow(table.getHeight(), new Appointment("DAY", "TIME", -1));
+
         Handler HandlerRefresh = new Handler();
         RunnableRefresh = new Runnable() {
             @RequiresApi(api = Build.VERSION_CODES.N)
@@ -113,13 +119,6 @@ public class LandingPage extends AppCompatActivity {
                 // Below compares fetched appointments to previously fetched appointments
                 // Before checking for new appointments, ensure there is a history
                 if (!previousAppointments.isEmpty()){
-                    //Open test using this
-                    appointments.set(0, new Appointment(appointments.get(0).getDate(), appointments.get(0).getTime(), 1));
-                    previousAppointments.set(0, new Appointment(appointments.get(0).getDate(), appointments.get(0).getTime(), 0));
-
-                    appointments.set(1, new Appointment(appointments.get(1).getDate(), appointments.get(1).getTime(), 1));
-                    previousAppointments.set(1, new Appointment(appointments.get(1).getDate(), appointments.get(1).getTime(), 0));
-
                     for (Appointment appointment : appointments){
                         for (Appointment previousAppointment : previousAppointments){
                             if (appointment.getAvailable() > 0 && previousAppointment.getAvailable() == 0){
@@ -251,7 +250,16 @@ public class LandingPage extends AppCompatActivity {
         // Dynamically size the table based on number of appointments
         TableLayout table = (TableLayout) findViewById(R.id.AppointmentsTable);
         int height = table.getLayoutParams().height;
-        int previousTableSize = table.getChildCount();
+
+        // Go through the rows and remove everything except the
+        for (int i = table.getChildCount() - 1; i > -1; i--){
+            TableRow currRow = (TableRow) table.getChildAt(i);
+            TextView textviewDay = (TextView) currRow.getChildAt(0);
+            String stringDay = textviewDay.getText().toString();
+            if (!stringDay.equals("Day")){
+                table.removeView(currRow);
+            }
+        }
 
         SharedPreferences dayPreferences = getSharedPreferences("dayPreferences", 0);
         SharedPreferences timePreferences = getSharedPreferences("timePreferences", 0);
@@ -271,7 +279,8 @@ public class LandingPage extends AppCompatActivity {
             }
         }
 
-        int newHeight = Math.max(((195 + 45) * numRows) + 45, height);
+        int header = 100 + 45;
+        int newHeight = Math.max(((195 + 45) * numRows) + 45 + header, height);
 
         for (Appointment appointment : returnedAppointments){
             if (appointment.getAvailable() > 0){
@@ -286,13 +295,7 @@ public class LandingPage extends AppCompatActivity {
                 }
             }
         }
-
-        // After adding each row, remove each row previously there. removeAllViews() breaks list.
-        // Do not remove view at position 0. Note: Despite how it seem, the list completely updates
-        for (int i = 0; i < previousTableSize; i++){
-            table.removeViewAt(1);
-        }
-
+        //table.setLayoutParams(new TableLayout.LayoutParams(table.getLayoutParams().width, newHeight));
     }
 
     public class AppointmentRetriever extends AsyncTask<Void, Void, ArrayList<Appointment>> {
@@ -353,85 +356,157 @@ public class LandingPage extends AppCompatActivity {
         // Add row to table
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-
         TableLayout table = (TableLayout) findViewById(R.id.AppointmentsTable);
 
-        int width = table.getLayoutParams().width;
-
         TableRow row = new TableRow(this);
-
-        row.setPadding(15,45,15,0);
-
-        table.setLayoutParams(new TableLayout.LayoutParams(table.getLayoutParams().width, newHeight));
 
         TextView appointmentDay = new TextView(this);
         TextView appointmentTime = new TextView(this);
         TextView appointmentAvailability = new TextView(this);
 
-        appointmentDay.setTextColor(Color.parseColor("#000000"));
-        appointmentTime.setTextColor(Color.parseColor("#000000"));
-        appointmentAvailability.setTextColor(Color.parseColor("#000000"));
+        // Only should happen with placeholder value
+        if (appointment.getAvailable() == -1){
 
-        appointmentDay.setBackgroundColor(Color.parseColor("#F2F197"));
-        appointmentTime.setBackgroundColor(Color.parseColor("#F2F197"));
-        appointmentAvailability.setBackgroundColor(Color.parseColor("#F2F197"));
+            int width = table.getLayoutParams().width;
 
-        appointmentDay.setGravity(Gravity.CENTER);
-        appointmentTime.setGravity(Gravity.CENTER);
-        appointmentAvailability.setGravity(Gravity.CENTER);
+            row.setPadding(15,45,15,0);
 
-        appointmentDay.setTextSize(15);
-        appointmentTime.setTextSize(15);
-        appointmentAvailability.setTextSize(15);
+            appointmentDay.setTextColor(Color.parseColor("#000000"));
+            appointmentTime.setTextColor(Color.parseColor("#000000"));
+            appointmentAvailability.setTextColor(Color.parseColor("#000000"));
 
-        appointmentDay.setMaxWidth(width/3);
-        appointmentTime.setMaxWidth(width/3);
-        appointmentAvailability.setMaxWidth(width/3);
+            appointmentDay.setBackgroundColor(Color.parseColor("#F2F197"));
+            appointmentTime.setBackgroundColor(Color.parseColor("#F2F197"));
+            appointmentAvailability.setBackgroundColor(Color.parseColor("#F2F197"));
 
-        appointmentDay.setMinWidth(width/3);
-        appointmentTime.setMinWidth(width/3);
-        appointmentAvailability.setMinWidth(width/3);
+            appointmentDay.setGravity(Gravity.CENTER);
+            appointmentTime.setGravity(Gravity.CENTER);
+            appointmentAvailability.setGravity(Gravity.CENTER);
 
-        appointmentDay.setMaxHeight(150);
-        appointmentTime.setMaxHeight(150);
+            appointmentDay.setTextSize(15);
+            appointmentTime.setTextSize(15);
+            appointmentAvailability.setTextSize(15);
 
-        appointmentDay.setMinHeight(150);
-        appointmentTime.setMinHeight(150);
-        appointmentAvailability.setMinHeight(150);
+            appointmentDay.setMaxWidth(width/3);
+            appointmentTime.setMaxWidth(width/3);
+            appointmentAvailability.setMaxWidth(width/3);
 
-        appointmentDay.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
-        appointmentTime.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
-        appointmentAvailability.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
+            appointmentDay.setMinWidth(width/3);
+            appointmentTime.setMinWidth(width/3);
+            appointmentAvailability.setMinWidth(width/3);
 
-        String textDay = appointment.getDate().replace(", ", "\n");
+            appointmentDay.setMaxHeight(100);
+            appointmentTime.setMaxHeight(100);
+            appointmentAvailability.setMaxHeight(100);
 
-        String textTime = appointment.getTime().replace(" - ", "-\n");
-        String textAvailability = String.valueOf(appointment.getAvailable()) + " appt(s)";
+            appointmentDay.setMinHeight(100);
+            appointmentTime.setMinHeight(100);
+            appointmentAvailability.setMinHeight(100);
 
-        appointmentDay.setTextColor(Color.BLACK);
-        appointmentTime.setTextColor(Color.BLACK);
-        appointmentAvailability.setTextColor(Color.BLACK);
+            appointmentDay.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
+            appointmentTime.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
+            appointmentAvailability.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
 
-        appointmentDay.setText(textDay);
-        appointmentTime.setText(textTime);
-        appointmentAvailability.setText(textAvailability);
+            //String textDay = appointment.getDate().replace(", ", "\n");
+            String textDay = "Day";
+            String textTime = "Time";
+            String textAvailability = "Appts";
 
-        appointmentDay.setTextSize(16.0f);
-        appointmentTime.setTextSize(16.0f);
-        appointmentAvailability.setTextSize(16.0f);
+            appointmentDay.setTextColor(Color.BLACK);
+            appointmentTime.setTextColor(Color.BLACK);
+            appointmentAvailability.setTextColor(Color.BLACK);
 
-        row.addView(appointmentDay);
-        row.addView(appointmentTime);
-        row.addView(appointmentAvailability);
+            appointmentDay.setTypeface(Typeface.DEFAULT_BOLD);
+            appointmentTime.setTypeface(Typeface.DEFAULT_BOLD);
+            appointmentAvailability.setTypeface(Typeface.DEFAULT_BOLD);
 
-        row.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Uri uri = Uri.parse("https://www.dalsports.dal.ca/Program/GetProgramDetails?courseId=8993d840-c85b-4afb-b8a9-3c30b3c16817&semesterId=cefa4d21-6d59-4e72-81b8-7d66b8843351#"); // missing 'http://' will cause crashed
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(intent);
-            }
-        });
+            appointmentDay.setText(textDay);
+            appointmentTime.setText(textTime);
+            appointmentAvailability.setText(textAvailability);
+
+            appointmentDay.setTextSize(28.0f);
+            appointmentTime.setTextSize(28.0f);
+            appointmentAvailability.setTextSize(28.0f);
+
+            row.addView(appointmentDay);
+            row.addView(appointmentTime);
+            row.addView(appointmentAvailability);
+
+        }
+        // Otherwise with normal listings
+        else {
+            int width = table.getLayoutParams().width;
+
+            row.setPadding(15,45,15,0);
+
+            table.setLayoutParams(new TableLayout.LayoutParams(table.getLayoutParams().width, newHeight));
+
+            appointmentDay.setTextColor(Color.parseColor("#000000"));
+            appointmentTime.setTextColor(Color.parseColor("#000000"));
+            appointmentAvailability.setTextColor(Color.parseColor("#000000"));
+
+            appointmentDay.setBackgroundColor(Color.parseColor("#F2F197"));
+            appointmentTime.setBackgroundColor(Color.parseColor("#F2F197"));
+            appointmentAvailability.setBackgroundColor(Color.parseColor("#F2F197"));
+
+            appointmentDay.setGravity(Gravity.CENTER);
+            appointmentTime.setGravity(Gravity.CENTER);
+            appointmentAvailability.setGravity(Gravity.CENTER);
+
+            appointmentDay.setTextSize(15);
+            appointmentTime.setTextSize(15);
+            appointmentAvailability.setTextSize(15);
+
+            appointmentDay.setMaxWidth(width/3);
+            appointmentTime.setMaxWidth(width/3);
+            appointmentAvailability.setMaxWidth(width/3);
+
+            appointmentDay.setMinWidth(width/3);
+            appointmentTime.setMinWidth(width/3);
+            appointmentAvailability.setMinWidth(width/3);
+
+            appointmentDay.setMaxHeight(150);
+            appointmentTime.setMaxHeight(150);
+            appointmentAvailability.setMaxHeight(150);
+
+            appointmentDay.setMinHeight(150);
+            appointmentTime.setMinHeight(150);
+            appointmentAvailability.setMinHeight(150);
+
+            appointmentDay.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
+            appointmentTime.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
+            appointmentAvailability.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
+
+            String textDay = appointment.getDate().replace(", ", "\n");
+
+            String textTime = appointment.getTime().replace(" - ", "-\n");
+            String textAvailability = String.valueOf(appointment.getAvailable()) + " appt(s)";
+
+            appointmentDay.setTextColor(Color.BLACK);
+            appointmentTime.setTextColor(Color.BLACK);
+            appointmentAvailability.setTextColor(Color.BLACK);
+
+            appointmentDay.setText(textDay);
+            appointmentTime.setText(textTime);
+            appointmentAvailability.setText(textAvailability);
+
+            appointmentDay.setTextSize(16.0f);
+            appointmentTime.setTextSize(16.0f);
+            appointmentAvailability.setTextSize(16.0f);
+
+            row.addView(appointmentDay);
+            row.addView(appointmentTime);
+            row.addView(appointmentAvailability);
+
+            row.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Uri uri = Uri.parse("https://www.dalsports.dal.ca/Program/GetProgramDetails?courseId=8993d840-c85b-4afb-b8a9-3c30b3c16817&semesterId=cefa4d21-6d59-4e72-81b8-7d66b8843351#");
+                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                    startActivity(intent);
+                }
+            });
+        }
 
         table.addView(row, new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
     }
