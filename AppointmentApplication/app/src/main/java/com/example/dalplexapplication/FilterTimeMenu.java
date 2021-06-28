@@ -63,12 +63,16 @@ public class FilterTimeMenu extends AppCompatActivity {
         timeslots.add("6:00 AM - 7:00 AM");
         timeslots.add("7:00 AM - 8:00 AM");
         timeslots.add("7:30 AM - 8:30 AM");
+        timeslots.add("8:00 AM - 9:00 AM");
         timeslots.add("8:30 AM - 9:30 AM");
         timeslots.add("9:00 AM - 10:00 AM");
+        timeslots.add("9:30 AM - 10:30 AM");
         timeslots.add("10:00 AM - 11:00 AM");
         timeslots.add("10:30 AM - 11:30 AM");
+        timeslots.add("11:00 AM - 12:00 PM");
         timeslots.add("11:30 AM - 12:30 PM");
         timeslots.add("12:00 PM - 1:00 PM");
+        timeslots.add("12:30 PM - 1:30 PM");
         timeslots.add("1:00 PM - 2:00 PM");
         timeslots.add("1:30 PM - 2:30 PM");
         timeslots.add("2:30 PM - 3:30 PM");
@@ -86,6 +90,13 @@ public class FilterTimeMenu extends AppCompatActivity {
         timeslots.add("1:00 PM - 2:00 PM");
         timeslots.add("2:30 PM - 3:30 PM");
         timeslots.add("4:00 PM - 5:00 PM");;
+         */
+
+        /* Assuming specifically for holidays (Canada day, 2021). 8am - 2pm
+        timeslots.add("8:00 AM - 9:00 AM");
+        timeslots.add("9:30 AM - 10:30 AM");
+        timeslots.add("11:00 AM - 12:00 PM");
+        timeslots.add("12:30 PM - 1:30 PM");
          */
 
         newHeight = Math.max(((150 + 45) * timeslots.size()) + 45, height);
