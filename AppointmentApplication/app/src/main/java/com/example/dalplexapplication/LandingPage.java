@@ -4,14 +4,12 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-import androidx.core.content.res.ResourcesCompat;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -37,28 +35,29 @@ import java.util.concurrent.ExecutionException;
 
 public class LandingPage extends AppCompatActivity {
 
-    int rowCounter = 1;
     ArrayList<String> appointmentTimes = new ArrayList<>();
-    ArrayList<Integer> appointmentAvailablility = new ArrayList<>();
+    ArrayList<Integer> appointmentAvailability = new ArrayList<>();
     ArrayList<String> appointmentDates = new ArrayList<>();
     ArrayList<Appointment> appointments = new ArrayList<>();
     ArrayList<Appointment> previousAppointments = new ArrayList<>();
     Runnable RunnableRefresh;
-    private static boolean activityVisible;
-    //private final static int INTERVAL = 1000 * 60 * 2; //2 minutes
-    private final static int INTERVAL = 500 * 60; //30 minute secs
+
     ArrayList<Appointment> openedAppointments = new ArrayList<>();
     ArrayList<Appointment> freshAppointments = new ArrayList<>();
 
+    // 5 minute refresh interval.
+    //private final static int REFRESH_INTERVAL = 1000 * 60 * 5;
+    private final static int REFRESH_INTERVAL = 500 * 60;
+    final String channelName1 = "dalplexChannelFreshAppointments";
+    final String channelName2 = "dalplexChannelNewAppointments";
 
-    final String channelName1 = "dalplexChannelNewAppointments";
-    final String channelName2 = "dalplexChannelFreshAppointments";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Initialization of images at the top of application.
         ImageView menuButton = findViewById(R.id.menuButton);
         menuButton.setColorFilter(Color.GRAY);
 
@@ -111,23 +110,15 @@ public class LandingPage extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                // Compare fetched appointments to previously fetched appointments
-                // Checking for new openings for desired appointments (Cancelled full sessions)
-
+                // Below compares fetched appointments to previously fetched appointments
                 // Before checking for new appointments, ensure there is a history
                 if (!previousAppointments.isEmpty()){
-                    //Fresh test using this.
-                    //appointments.add(new Appointment("Monday, June 28, 2021", "6:00 PM - 7:00 PM", 55));
-
                     //Open test using this
-                    //appointments.set(0, new Appointment(appointments.get(0).getDate(), appointments.get(0).getTime(), appointments.get(0).getAvailable() + 1));
+                    appointments.set(0, new Appointment(appointments.get(0).getDate(), appointments.get(0).getTime(), 1));
+                    previousAppointments.set(0, new Appointment(appointments.get(0).getDate(), appointments.get(0).getTime(), 0));
 
-                    //Open test using this
-                    //appointments.set(0, new Appointment(appointments.get(0).getDate(), appointments.get(0).getTime(), 1));
-                    //previousAppointments.set(0, new Appointment(appointments.get(0).getDate(), appointments.get(0).getTime(), 0));
-
-                    //appointments.set(1, new Appointment(appointments.get(1).getDate(), appointments.get(1).getTime(), 1));
-                    //previousAppointments.set(1, new Appointment(appointments.get(1).getDate(), appointments.get(1).getTime(), 0));
+                    appointments.set(1, new Appointment(appointments.get(1).getDate(), appointments.get(1).getTime(), 1));
+                    previousAppointments.set(1, new Appointment(appointments.get(1).getDate(), appointments.get(1).getTime(), 0));
 
                     for (Appointment appointment : appointments){
                         for (Appointment previousAppointment : previousAppointments){
@@ -182,18 +173,15 @@ public class LandingPage extends AppCompatActivity {
 
                 }
 
-
+                // Create notification based on if there are fresh or newly freed appointments
                 if (!freshAppointments.isEmpty()){
                     createNotification(freshAppointments, "fresh");
-                    System.out.println("FRESH");
                 }
 
                 if (!openedAppointments.isEmpty()){
                     createNotification(openedAppointments, "opened");
-                    System.out.println("OPENED");
-
                 }
-                HandlerRefresh.postDelayed(RunnableRefresh, INTERVAL);
+                HandlerRefresh.postDelayed(RunnableRefresh, REFRESH_INTERVAL);
             }
         };
         RunnableRefresh.run();
@@ -201,6 +189,7 @@ public class LandingPage extends AppCompatActivity {
     }
 
     public void createNotification(ArrayList<Appointment> newAppointments, String intention){
+        // Format the notification
         StringBuilder appointmentsString = new StringBuilder();
         for (Appointment appointment : newAppointments){
             appointmentsString.append(appointment.getDate()).append(" ").append(appointment.getTime());
@@ -211,6 +200,7 @@ public class LandingPage extends AppCompatActivity {
 
         createNotificationChannel();
 
+        // Base builder
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), channelName2)
                 .setSmallIcon(R.drawable.ic_stat_name)
                 .setContentTitle("Please contact developer!")
@@ -235,21 +225,20 @@ public class LandingPage extends AppCompatActivity {
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT);
         }
 
-
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
         notificationManager.notify(0, builder.build());
     }
 
     private void createNotificationChannel() {
-
+        // Method to create notifcation channels
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name1 = "dalplexChannelNewAppointments";
-            CharSequence name2 = "dalplexChannelFreshAppointments";
-            String description1 = "Channel for the dalplex's new appointments";
-            String description2 = "Channel for the dalplex's fresh appointments";
+            CharSequence name1 = "dalplexChannelFreshAppointments";
+            CharSequence name2 = "dalplexChannelNewAppointments";
+            String description1 = "Channel for the dalplex's fresh appointments";
+            String description2 = "Channel for the dalplex's opened appointments";
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel1 = new NotificationChannel("dalplexChannelNewAppointments", name1, importance);
-            NotificationChannel channel2 = new NotificationChannel("dalplexChannelFreshAppointments", name2, importance);
+            NotificationChannel channel1 = new NotificationChannel("dalplexChannelFreshAppointments", name1, importance);
+            NotificationChannel channel2 = new NotificationChannel("dalplexChannelNewAppointments", name2, importance);
             channel1.setDescription(description1);
             channel2.setDescription(description2);
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
@@ -259,6 +248,7 @@ public class LandingPage extends AppCompatActivity {
     }
 
     public void createTable(ArrayList<Appointment> returnedAppointments){
+        // Dynamically size the table based on number of appointments
         TableLayout table = (TableLayout) findViewById(R.id.AppointmentsTable);
         int height = table.getLayoutParams().height;
         int previousTableSize = table.getChildCount();
@@ -302,18 +292,20 @@ public class LandingPage extends AppCompatActivity {
         for (int i = 0; i < previousTableSize; i++){
             table.removeViewAt(1);
         }
+
     }
 
     public class AppointmentRetriever extends AsyncTask<Void, Void, ArrayList<Appointment>> {
-
+        // Background async task to query Dalplex website.
         @Override
         protected ArrayList<Appointment> doInBackground(Void... voids) {
             try {
+                // Scrape website for appointments and format them
                 String url = "https://www.dalsports.dal.ca/Program/GetProgramDetails?courseId=8993d840-c85b-4afb-b8a9-3c30b3c16817&semesterId=cefa4d21-6d59-4e72-81b8-7d66b8843351";
                 Document doc = Jsoup.connect(url).get();
                 Elements byClass = doc.getElementsByClass("caption program-schedule-card-caption");
 
-                appointmentAvailablility.clear();
+                appointmentAvailability.clear();
                 appointmentDates.clear();
                 appointmentTimes.clear();
 
@@ -337,7 +329,7 @@ public class LandingPage extends AppCompatActivity {
                     if (!tempList[0].equals("No")){
                         availableString = Integer.parseInt(tempList[0]);
                     }
-                    appointmentAvailablility.add(availableString);
+                    appointmentAvailability.add(availableString);
                     Appointment newAppointment = new Appointment(dateString, timeString, availableString);
                     appointments.add(newAppointment);
                 }
@@ -353,10 +345,12 @@ public class LandingPage extends AppCompatActivity {
         }
     }
     public void returnSize(ArrayList<Appointment> returnedAppointments){
+        // Post execute, send to make dynamic table
         createTable(returnedAppointments);
     }
 
     protected void addRow(int newHeight, Appointment appointment){
+        // Add row to table
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
@@ -372,43 +366,42 @@ public class LandingPage extends AppCompatActivity {
 
         TextView appointmentDay = new TextView(this);
         TextView appointmentTime = new TextView(this);
-        TextView appointmentAvailablility = new TextView(this);
+        TextView appointmentAvailability = new TextView(this);
 
         appointmentDay.setTextColor(Color.parseColor("#000000"));
         appointmentTime.setTextColor(Color.parseColor("#000000"));
-        appointmentAvailablility.setTextColor(Color.parseColor("#000000"));
+        appointmentAvailability.setTextColor(Color.parseColor("#000000"));
 
         appointmentDay.setBackgroundColor(Color.parseColor("#F2F197"));
         appointmentTime.setBackgroundColor(Color.parseColor("#F2F197"));
-        appointmentAvailablility.setBackgroundColor(Color.parseColor("#F2F197"));
+        appointmentAvailability.setBackgroundColor(Color.parseColor("#F2F197"));
 
         appointmentDay.setGravity(Gravity.CENTER);
         appointmentTime.setGravity(Gravity.CENTER);
-        appointmentAvailablility.setGravity(Gravity.CENTER);
+        appointmentAvailability.setGravity(Gravity.CENTER);
 
         appointmentDay.setTextSize(15);
         appointmentTime.setTextSize(15);
-        appointmentAvailablility.setTextSize(15);
+        appointmentAvailability.setTextSize(15);
 
         appointmentDay.setMaxWidth(width/3);
         appointmentTime.setMaxWidth(width/3);
-        appointmentAvailablility.setMaxWidth(width/3);
+        appointmentAvailability.setMaxWidth(width/3);
 
         appointmentDay.setMinWidth(width/3);
         appointmentTime.setMinWidth(width/3);
-        appointmentAvailablility.setMinWidth(width/3);
+        appointmentAvailability.setMinWidth(width/3);
 
         appointmentDay.setMaxHeight(150);
         appointmentTime.setMaxHeight(150);
-        //appointmentAvailablility.setMaxHeight(150);
 
         appointmentDay.setMinHeight(150);
         appointmentTime.setMinHeight(150);
-        appointmentAvailablility.setMinHeight(150);
+        appointmentAvailability.setMinHeight(150);
 
         appointmentDay.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
         appointmentTime.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
-        appointmentAvailablility.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
+        appointmentAvailability.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
 
         String textDay = appointment.getDate().replace(", ", "\n");
 
@@ -417,20 +410,19 @@ public class LandingPage extends AppCompatActivity {
 
         appointmentDay.setTextColor(Color.BLACK);
         appointmentTime.setTextColor(Color.BLACK);
-        appointmentAvailablility.setTextColor(Color.BLACK);
+        appointmentAvailability.setTextColor(Color.BLACK);
 
         appointmentDay.setText(textDay);
         appointmentTime.setText(textTime);
-        appointmentAvailablility.setText(textAvailability);
+        appointmentAvailability.setText(textAvailability);
 
         appointmentDay.setTextSize(16.0f);
         appointmentTime.setTextSize(16.0f);
-        appointmentAvailablility.setTextSize(16.0f);
-
+        appointmentAvailability.setTextSize(16.0f);
 
         row.addView(appointmentDay);
         row.addView(appointmentTime);
-        row.addView(appointmentAvailablility);
+        row.addView(appointmentAvailability);
 
         row.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -440,8 +432,6 @@ public class LandingPage extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        System.out.println(row.getHeight());
 
         table.addView(row, new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
     }

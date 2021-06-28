@@ -17,10 +17,34 @@ public class HelpMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);
 
+        // Initialization of images at the top of application.
+        ImageView helpButton = (ImageView) findViewById(R.id.helpButton);
+        helpButton.setColorFilter(Color.GRAY);
 
+        ImageView refreshButton = (ImageView) findViewById(R.id.refreshButton);
+        refreshButton.setColorFilter(Color.GRAY);
+
+        ImageView menuButton = findViewById(R.id.menuButton);
+        menuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HelpMenu.this, LandingPage.class);
+                startActivity(intent);
+            }
+        });
+
+        ImageView filterMenu = findViewById(R.id.filterMenu);
+        filterMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HelpMenu.this, FilterMenu.class);
+                startActivity(intent);
+            }
+        });
+
+        // Setting table size and FAQs
         TableLayout table = (TableLayout) findViewById(R.id.FAQTable);
         table.setLayoutParams(new TableLayout.LayoutParams(table.getLayoutParams().width, 3300));
-
 
         CharSequence questionOneString = "What Does This App Do?";
         CharSequence answerOneString = "The Dalplex Fitness Hall app assists in acquiring Dalplex " +
@@ -79,30 +103,5 @@ public class HelpMenu extends AppCompatActivity {
         answerThreeTextView.setText(answerThreeString);
         answerFourTextView.setText(answerFourString);
         answerFiveTextView.setText(answerFiveString);
-
-
-        ImageView helpButton = (ImageView) findViewById(R.id.helpButton);
-        helpButton.setColorFilter(Color.GRAY);
-
-        ImageView refreshButton = (ImageView) findViewById(R.id.refreshButton);
-        refreshButton.setColorFilter(Color.GRAY);
-
-        ImageView menuButton = findViewById(R.id.menuButton);
-        menuButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(HelpMenu.this, LandingPage.class);
-                startActivity(intent);
-            }
-        });
-
-        ImageView filterMenu = findViewById(R.id.filterMenu);
-        filterMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(HelpMenu.this, FilterMenu.class);
-                startActivity(intent);
-            }
-        });
     }
 }

@@ -21,7 +21,6 @@ import java.util.ArrayList;
 public class FilterDayMenu extends AppCompatActivity {
 
     int tableWidth, newHeight;
-
     SharedPreferences dayPreferences;
 
     @Override
@@ -29,6 +28,7 @@ public class FilterDayMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
 
+        // Initialization of images at the top of application.
         ImageView refreshButton = (ImageView) findViewById(R.id.refreshButton);
         refreshButton.setColorFilter(Color.GRAY);
 
@@ -56,17 +56,11 @@ public class FilterDayMenu extends AppCompatActivity {
             }
         });
 
-        int height = table.getLayoutParams().height;
-
-        //Hardcoded as there should always be 7 days in a week
-        int numRows = 7;
-
-        newHeight = Math.max(((150 + 45) * numRows) + 45, height);
-
+        // Set the days for row creation
         dayPreferences = getSharedPreferences("dayPreferences", MODE_PRIVATE);
 
+        int height = table.getLayoutParams().height;
         ArrayList<String> days = new ArrayList<>();
-
         days.add("Monday");
         days.add("Tuesday");
         days.add("Wednesday");
@@ -74,26 +68,18 @@ public class FilterDayMenu extends AppCompatActivity {
         days.add("Friday");
         days.add("Saturday");
         days.add("Sunday");
+        newHeight = Math.max(((150 + 45) * days.size()) + 45, height);
 
-
+        // Add each day as a row
         for(String day_name : days){
             addRow(day_name);
         }
-
     }
 
-
-    // TODO: dayPreference ends up being fixed when row is initialized. Make an initial call to set the switch, then make every other reference a getString call within onClick
+    // Add rows with switches for each of the days
     public void addRow(String day){
-
-
-
-
         TableLayout table = (TableLayout) findViewById(R.id.AppointmentsTable);
-        int height = table.getLayoutParams().height;
         int width = table.getLayoutParams().width;
-
-
 
         TableRow row = new TableRow(this);
         row.setPadding(15,45,15,0);
@@ -101,10 +87,8 @@ public class FilterDayMenu extends AppCompatActivity {
         TextView filterText = new TextView(this);
         Switch filterSwitch = new Switch(this);
 
-
         filterText.setTextColor(Color.parseColor("#000000"));
         filterSwitch.setTextColor(Color.parseColor("#000000"));
-
 
         Typeface typeface = ResourcesCompat.getFont(this, R.font.fugaz_one);
         filterText.setTypeface(typeface);
@@ -131,33 +115,23 @@ public class FilterDayMenu extends AppCompatActivity {
         filterText.setMinHeight(150);
         filterSwitch.setMinHeight(150);
 
-
         filterText.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
         filterSwitch.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
 
         filterText.setText(day);
 
         dayPreferences = getSharedPreferences("dayPreferences", MODE_PRIVATE);
-        //Boolean.getValue(...) doesn't work
+        // Boolean.getValue(...) doesn't work
         filterSwitch.setChecked(dayPreferences.getString(day, String.valueOf(false)).equals("true"));
 
-
+        // When switch is flipped, commit to SharedPreferences for reference.
         filterSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //System.out.println("-------------------");
                 dayPreferences = getSharedPreferences("dayPreferences", 0);
-                //System.out.println("filterSwitch.isChecked(): " + filterSwitch.isChecked());
-                //System.out.println("new get: " + dayPreferences.getString(day, String.valueOf(false)));
                 SharedPreferences.Editor editPreference = dayPreferences.edit();
-                System.out.println(day);
-                System.out.println(String.valueOf(filterSwitch.isChecked()));
-                //Apply does not produce desired results
+                // apply() does not produce desired results
                 editPreference.putString(day, String.valueOf(filterSwitch.isChecked())).commit();
-                //dayPreferences = getSharedPreferences("dayPreferences", 0);
-                //System.out.println("filterSwitch.isChecked(): " + filterSwitch.isChecked());
-                //System.out.println("new get: " + dayPreferences.getString(day, String.valueOf(false)));
-
             }
         });
 

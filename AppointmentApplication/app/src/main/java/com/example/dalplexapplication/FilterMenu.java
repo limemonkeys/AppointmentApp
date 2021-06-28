@@ -15,14 +15,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
 public class FilterMenu extends AppCompatActivity {
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
 
+        // Initialization of images at the top of application.
         ImageView filterMenu = findViewById(R.id.filterMenu);
         filterMenu.setColorFilter(Color.GRAY);
 
@@ -47,12 +45,12 @@ public class FilterMenu extends AppCompatActivity {
             }
         });
 
-
-        TableLayout table = (TableLayout) findViewById(R.id.AppointmentsTable);
+        // Add rows for filtration (day and time)
         addRow("Filter by Days", "FilterDayMenu");
         addRow("Filter by Time", "FilterTimeMenu");
     }
 
+    // Add rows for days or time.
     public void addRow(String text, String FilterType){
         TableLayout table = (TableLayout) findViewById(R.id.AppointmentsTable);
         int width = table.getLayoutParams().width;

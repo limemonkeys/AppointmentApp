@@ -19,9 +19,7 @@ import androidx.core.content.res.ResourcesCompat;
 import java.util.ArrayList;
 
 public class FilterTimeMenu extends AppCompatActivity {
-
     int tableWidth, newHeight;
-
     SharedPreferences timePreferences;
 
     @Override
@@ -29,6 +27,7 @@ public class FilterTimeMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
 
+        // Initialization of images at the top of application.
         ImageView filterMenu = (ImageView) findViewById(R.id.filterMenu);
         filterMenu.setColorFilter(Color.GRAY);
 
@@ -36,7 +35,10 @@ public class FilterTimeMenu extends AppCompatActivity {
         refreshButton.setColorFilter(Color.GRAY);
 
         ImageView menuButton = findViewById(R.id.menuButton);
-        tableWidth = findViewById(R.id.AppointmentsTable).getLayoutParams().width;
+        TableLayout table = (TableLayout) findViewById(R.id.AppointmentsTable);
+        int height = table.getLayoutParams().height;
+        tableWidth = table.getLayoutParams().width;
+
         menuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,32 +56,29 @@ public class FilterTimeMenu extends AppCompatActivity {
             }
         });
 
-        TableLayout table = (TableLayout) findViewById(R.id.AppointmentsTable);
-        int height = table.getLayoutParams().height;
-        int width = table.getLayoutParams().width;
-
-        //Currently hardcoded as these time intervals shouldn't change
-        int numRows = 17;
-        newHeight = Math.max(((150 + 45) * numRows) + 45, height);
-        System.out.println(newHeight);
-
-        timePreferences = getSharedPreferences("timePreferences", MODE_PRIVATE);
-
+        // Set the times for row creation
         ArrayList<String> timeslots = new ArrayList<>();
 
-        // All other day's intervals
+        // All time intervals
         timeslots.add("6:00 AM - 7:00 AM");
+        timeslots.add("7:00 AM - 8:00 AM");
         timeslots.add("7:30 AM - 8:30 AM");
+        timeslots.add("8:30 AM - 9:30 AM");
         timeslots.add("9:00 AM - 10:00 AM");
+        timeslots.add("10:00 AM - 11:00 AM");
         timeslots.add("10:30 AM - 11:30 AM");
+        timeslots.add("11:30 AM - 12:30 PM");
         timeslots.add("12:00 PM - 1:00 PM");
+        timeslots.add("1:00 PM - 2:00 PM");
         timeslots.add("1:30 PM - 2:30 PM");
+        timeslots.add("2:30 PM - 3:30 PM");
         timeslots.add("3:00 PM - 4:00 PM");
+        timeslots.add("4:00 PM - 5:00 PM");
         timeslots.add("4:30 PM - 5:30 PM");
         timeslots.add("6:00 PM - 7:00 PM");
         timeslots.add("7:30 PM - 8:30 PM");
 
-        // Specifically Saturday's times intervals
+        /* Specifically Saturday's times intervals
         timeslots.add("7:00 AM - 8:00 AM");
         timeslots.add("8:30 AM - 9:30 AM");
         timeslots.add("10:00 AM - 11:00 AM");
@@ -87,12 +86,16 @@ public class FilterTimeMenu extends AppCompatActivity {
         timeslots.add("1:00 PM - 2:00 PM");
         timeslots.add("2:30 PM - 3:30 PM");
         timeslots.add("4:00 PM - 5:00 PM");;
+         */
+
+        newHeight = Math.max(((150 + 45) * timeslots.size()) + 45, height);
 
         for(String timeslot_name : timeslots){
             addRow(timeslot_name);
         }
     }
 
+    // Add rows with switches for each of the days
     public void addRow(String time){
         TableLayout table = (TableLayout) findViewById(R.id.AppointmentsTable);
 
@@ -143,17 +146,17 @@ public class FilterTimeMenu extends AppCompatActivity {
         filterText.setText(time);
         filterSwitch.setChecked(false);
 
-
         timePreferences = getSharedPreferences("timePreferences", MODE_PRIVATE);
-
         //Note: Boolean.getValue(...) doesn't work
         filterSwitch.setChecked(timePreferences.getString(time, String.valueOf(false)).equals("true"));
 
+        // When switch is flipped, commit to SharedPreferences for reference.
         filterSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 timePreferences = getSharedPreferences("timePreferences", 0);
                 SharedPreferences.Editor editPreference = timePreferences.edit();
+                // apply() does not produce desired results
                 editPreference.putString(time, String.valueOf(filterSwitch.isChecked())).commit();
             }
         });
