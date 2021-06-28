@@ -53,7 +53,7 @@
                 android:id="@+id/FAQTable"
                 android:layout_width="352dp"
                 android:layout_height="584dp"
-                android:background="@drawable/rounded_corners"
+                android:background="@drawable/rounded_corners_pale"
                 android:gravity="center_horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -95,11 +95,14 @@
                     android:layout_width="316dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="0dp"
-                    android:layout_marginRight="8dp"
                     android:layout_marginLeft="0dp"
                     android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:paddingStart="24dp"
                     android:paddingLeft="24dp"
                     android:paddingTop="4dp"
+                    android:paddingEnd="0dp"
                     android:paddingRight="0dp"
                     android:paddingBottom="0dp"
                     android:textColor="#000000"
@@ -110,10 +113,7 @@
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0"
-                    android:paddingStart="24dp"
-                    android:paddingEnd="0dp"
-                    android:layout_marginEnd="8dp" />
+                    app:layout_constraintVertical_bias="0.0" />
 
                 <TextView
                     android:id="@+id/QuestionTwo"
@@ -143,11 +143,14 @@
                     android:layout_width="316dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="0dp"
-                    android:layout_marginRight="8dp"
                     android:layout_marginLeft="0dp"
                     android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:paddingStart="24dp"
                     android:paddingLeft="24dp"
                     android:paddingTop="4dp"
+                    android:paddingEnd="0dp"
                     android:paddingRight="0dp"
                     android:paddingBottom="0dp"
                     android:textColor="#000000"
@@ -158,10 +161,7 @@
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0"
-                    android:paddingStart="24dp"
-                    android:paddingEnd="0dp"
-                    android:layout_marginEnd="8dp" />
+                    app:layout_constraintVertical_bias="0.0" />
 
                 <TextView
                     android:id="@+id/QuestionThree"
@@ -191,11 +191,14 @@
                     android:layout_width="316dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="0dp"
-                    android:layout_marginRight="8dp"
                     android:layout_marginLeft="0dp"
                     android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:paddingStart="24dp"
                     android:paddingLeft="24dp"
                     android:paddingTop="4dp"
+                    android:paddingEnd="0dp"
                     android:paddingRight="0dp"
                     android:paddingBottom="0dp"
                     android:textColor="#000000"
@@ -206,10 +209,7 @@
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0"
-                    android:paddingStart="24dp"
-                    android:paddingEnd="0dp"
-                    android:layout_marginEnd="8dp" />
+                    app:layout_constraintVertical_bias="0.0" />
 
                 <TextView
                     android:id="@+id/QuestionFour"
@@ -232,18 +232,21 @@
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0"/>
+                    app:layout_constraintVertical_bias="0.0" />
 
                 <TextView
                     android:id="@+id/AnswerFour"
                     android:layout_width="316dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="0dp"
-                    android:layout_marginRight="8dp"
                     android:layout_marginLeft="0dp"
                     android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:paddingStart="24dp"
                     android:paddingLeft="24dp"
                     android:paddingTop="4dp"
+                    android:paddingEnd="0dp"
                     android:paddingRight="0dp"
                     android:paddingBottom="0dp"
                     android:textColor="#000000"
@@ -254,10 +257,7 @@
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0"
-                    android:paddingStart="24dp"
-                    android:paddingEnd="0dp"
-                    android:layout_marginEnd="8dp" />
+                    app:layout_constraintVertical_bias="0.0" />
 
                 <TextView
                     android:id="@+id/QuestionFive"
@@ -280,18 +280,21 @@
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0"/>
+                    app:layout_constraintVertical_bias="0.0" />
 
                 <TextView
                     android:id="@+id/AnswerFive"
                     android:layout_width="316dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="0dp"
-                    android:layout_marginRight="8dp"
                     android:layout_marginLeft="0dp"
                     android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:paddingStart="24dp"
                     android:paddingLeft="24dp"
                     android:paddingTop="4dp"
+                    android:paddingEnd="0dp"
                     android:paddingRight="0dp"
                     android:paddingBottom="0dp"
                     android:textColor="#000000"
@@ -302,10 +305,7 @@
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0"
-                    android:paddingStart="24dp"
-                    android:paddingEnd="0dp"
-                    android:layout_marginEnd="8dp" />
+                    app:layout_constraintVertical_bias="0.0" />
 
             </TableLayout>
         </LinearLayout>
