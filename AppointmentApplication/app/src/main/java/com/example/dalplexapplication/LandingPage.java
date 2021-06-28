@@ -48,8 +48,7 @@ public class LandingPage extends AppCompatActivity {
     ArrayList<Appointment> freshAppointments = new ArrayList<>();
 
     // 5 minute refresh interval.
-    //private final static int REFRESH_INTERVAL = 1000 * 60 * 5;
-    private final static int REFRESH_INTERVAL = 500 * 60;
+    private final static int REFRESH_INTERVAL = 1000 * 60 * 5;
     final String channelName1 = "dalplexChannelFreshAppointments";
     final String channelName2 = "dalplexChannelNewAppointments";
 
