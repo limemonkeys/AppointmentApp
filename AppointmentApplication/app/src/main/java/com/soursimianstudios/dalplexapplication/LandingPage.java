@@ -1,4 +1,4 @@
-package com.example.dalplexapplication;
+package com.soursimianstudios.dalplexapplication;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -287,7 +287,7 @@ public class LandingPage extends AppCompatActivity {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int header = 100 + 45;
-        int newHeight = Math.max(((195 + 45) * numRows) + 45 + header, displayMetrics.heightPixels * 3/4);
+        int newHeight = Math.max(((195 + 45) * numRows) + 45 + header, displayMetrics.heightPixels * 10/16);
 
         // Add rows to table
         for (Appointment appointment : returnedAppointments){

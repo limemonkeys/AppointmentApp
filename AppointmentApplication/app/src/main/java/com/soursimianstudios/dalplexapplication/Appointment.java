@@ -1,4 +1,4 @@
-package com.example.dalplexapplication;
+package com.soursimianstudios.dalplexapplication;
 
 public class Appointment {
 

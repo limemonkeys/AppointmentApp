@@ -1,4 +1,4 @@
-package com.example.dalplexapplication;
+package com.soursimianstudios.dalplexapplication;
 
 import android.content.Context;
 

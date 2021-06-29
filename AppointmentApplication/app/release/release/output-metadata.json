@@ -4,8 +4,8 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.example.dalplexapplication",
-  "variantName": "processReleaseResources",
+  "applicationId": "com.soursimianstudios.dalplexapplication",
+  "variantName": "release",
   "elements": [
     {
       "type": "SINGLE",
