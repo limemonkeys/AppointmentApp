@@ -281,9 +281,11 @@ public class LandingPage extends AppCompatActivity {
                 }
             }
         }
-
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int header = 100 + 45;
-        int newHeight = Math.max(((195 + 45) * numRows) + 45 + header, height);
+        System.out.println(displayMetrics.heightPixels);
+        int newHeight = Math.max(((195 + 45) * numRows) + 45 + header, displayMetrics.heightPixels * 3/4);
 
         for (Appointment appointment : returnedAppointments){
             if (appointment.getAvailable() > 0){
@@ -297,6 +299,9 @@ public class LandingPage extends AppCompatActivity {
                     }
                 }
             }
+        }
+        if(numRows < 1){
+            table.setLayoutParams(new TableLayout.LayoutParams(table.getLayoutParams().width, displayMetrics.heightPixels * 17/27));
         }
     }
 

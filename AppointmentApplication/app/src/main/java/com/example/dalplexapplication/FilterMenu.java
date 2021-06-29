@@ -109,7 +109,6 @@ public class FilterMenu extends AppCompatActivity {
 
         filterText.setText(text);
 
-
         row.addView(filterText);
 
         table.addView(row, new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));

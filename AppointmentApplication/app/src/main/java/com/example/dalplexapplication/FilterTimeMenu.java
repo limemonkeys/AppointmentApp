@@ -105,7 +105,7 @@ public class FilterTimeMenu extends AppCompatActivity {
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int newHeight = Math.max(((150 + 45) * timeslots.size()) + 45, displayMetrics.heightPixels * 3/4);
+        int newHeight = Math.max(((150 + 45) * timeslots.size()) + 90, displayMetrics.heightPixels * 3/4);
         table.setLayoutParams(new TableLayout.LayoutParams(tableWidth, newHeight));
     }
 
