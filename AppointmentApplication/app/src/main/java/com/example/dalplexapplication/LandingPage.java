@@ -90,7 +90,7 @@ public class LandingPage extends AppCompatActivity {
 
         // Set title
         TextView appTitle = findViewById(R.id.AppTitle);
-        appTitle.setText("Dalplex \n Appointments");
+        appTitle.setText("Dalplex\nAppointments");
 
         // Adding header value in table.
         // Removing position 0 makes listings invisible, this is one reason header is a row.
