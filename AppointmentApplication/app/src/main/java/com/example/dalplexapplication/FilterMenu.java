@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -48,6 +49,15 @@ public class FilterMenu extends AppCompatActivity {
         // Add rows for filtration (day and time)
         addRow("Filter by Days", "FilterDayMenu");
         addRow("Filter by Time", "FilterTimeMenu");
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        TableLayout table = (TableLayout) findViewById(R.id.AppointmentsTable);
+
+        // Fixed number. Only filtering by day and time.
+        int dayTimeFilter = 2;
+        int newHeight = Math.max(((195 + 45) * dayTimeFilter) + 45, displayMetrics.heightPixels * 3/4);
+        table.setLayoutParams(new TableLayout.LayoutParams(table.getLayoutParams().width, newHeight));
     }
 
     // Add rows for days or time.

@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -68,12 +69,16 @@ public class FilterDayMenu extends AppCompatActivity {
         days.add("Friday");
         days.add("Saturday");
         days.add("Sunday");
-        newHeight = Math.max(((150 + 45) * days.size()) + 45, height);
 
         // Add each day as a row
         for(String day_name : days){
             addRow(day_name);
         }
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int newHeight = Math.max(((150 + 45) * days.size()) + 45, displayMetrics.heightPixels * 3/4);
+        table.setLayoutParams(new TableLayout.LayoutParams(tableWidth, newHeight));
     }
 
     // Add rows with switches for each of the days
@@ -99,7 +104,7 @@ public class FilterDayMenu extends AppCompatActivity {
         filterText.setGravity(Gravity.CENTER);
         filterSwitch.setGravity(Gravity.CENTER);
 
-        filterText.setTextSize(24);
+        filterText.setTextSize(18);
 
         filterText.setMaxWidth(width/2);
         filterSwitch.setMaxWidth(width/2);

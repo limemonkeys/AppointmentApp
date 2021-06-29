@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -36,7 +37,6 @@ public class FilterTimeMenu extends AppCompatActivity {
 
         ImageView menuButton = findViewById(R.id.menuButton);
         TableLayout table = (TableLayout) findViewById(R.id.AppointmentsTable);
-        int height = table.getLayoutParams().height;
         tableWidth = table.getLayoutParams().width;
 
         menuButton.setOnClickListener(new View.OnClickListener() {
@@ -99,18 +99,20 @@ public class FilterTimeMenu extends AppCompatActivity {
         timeslots.add("12:30 PM - 1:30 PM");
          */
 
-        newHeight = Math.max(((150 + 45) * timeslots.size()) + 45, height);
-
         for(String timeslot_name : timeslots){
             addRow(timeslot_name);
         }
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int newHeight = Math.max(((150 + 45) * timeslots.size()) + 45, displayMetrics.heightPixels * 3/4);
+        table.setLayoutParams(new TableLayout.LayoutParams(tableWidth, newHeight));
     }
 
     // Add rows with switches for each of the days
     public void addRow(String time){
         TableLayout table = (TableLayout) findViewById(R.id.AppointmentsTable);
 
-        int height = table.getLayoutParams().height;
         int width = table.getLayoutParams().width;
 
         TableRow row = new TableRow(this);
@@ -120,7 +122,6 @@ public class FilterTimeMenu extends AppCompatActivity {
 
         TextView filterText = new TextView(this);
         Switch filterSwitch = new Switch(this);
-
 
         filterText.setTextColor(Color.parseColor("#000000"));
         filterSwitch.setTextColor(Color.parseColor("#000000"));
@@ -134,7 +135,7 @@ public class FilterTimeMenu extends AppCompatActivity {
         filterText.setGravity(Gravity.CENTER);
         filterSwitch.setGravity(Gravity.CENTER);
 
-        filterText.setTextSize(18);
+        filterText.setTextSize(16);
 
         filterText.setMaxWidth(width/2);
         filterSwitch.setMaxWidth(width/2);
@@ -143,7 +144,6 @@ public class FilterTimeMenu extends AppCompatActivity {
         filterSwitch.setMinWidth(width/2);
 
         filterSwitch.setPadding(0,0,tableWidth/6,0);
-        System.out.println("WIDTH: " + String.valueOf(width));
 
         filterText.setMaxHeight(150);
         filterSwitch.setMaxHeight(150);

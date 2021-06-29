@@ -88,6 +88,10 @@ public class LandingPage extends AppCompatActivity {
             }
         });
 
+        // Set title
+        TextView appTitle = findViewById(R.id.AppTitle);
+        appTitle.setText("Dalplex \n Appointments");
+
         // Adding header value in table.
         // Removing position 0 makes listings invisible, this is one reason header is a row.
         TableLayout table = (TableLayout) findViewById(R.id.AppointmentsTable);
@@ -209,7 +213,7 @@ public class LandingPage extends AppCompatActivity {
         if (intention.equals("fresh")){
             builder = new NotificationCompat.Builder(getApplicationContext(), channelName1)
                     .setSmallIcon(R.drawable.ic_stat_name)
-                    .setContentTitle("Freshly Created Dalplex Appointments Available:")
+                    .setContentTitle("Freshly Created Appointments Available:")
                     .setStyle(new NotificationCompat.BigTextStyle()
                             .bigText(appointmentsString))
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT);
@@ -217,7 +221,7 @@ public class LandingPage extends AppCompatActivity {
         if (intention.equals("opened")){
             builder = new NotificationCompat.Builder(getApplicationContext(), channelName2)
                     .setSmallIcon(R.drawable.ic_stat_name)
-                    .setContentTitle("Previously Occupied Dalplex Appointments Available:")
+                    .setContentTitle("Previously Occupied Appointments Available:")
                     .setStyle(new NotificationCompat.BigTextStyle()
                             .bigText(appointmentsString))
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT);
@@ -294,7 +298,6 @@ public class LandingPage extends AppCompatActivity {
                 }
             }
         }
-        //table.setLayoutParams(new TableLayout.LayoutParams(table.getLayoutParams().width, newHeight));
     }
 
     public class AppointmentRetriever extends AsyncTask<Void, Void, ArrayList<Appointment>> {
@@ -353,8 +356,6 @@ public class LandingPage extends AppCompatActivity {
 
     protected void addRow(int newHeight, Appointment appointment){
         // Add row to table
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         TableLayout table = (TableLayout) findViewById(R.id.AppointmentsTable);
 
         TableRow row = new TableRow(this);
