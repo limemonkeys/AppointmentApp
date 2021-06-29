@@ -267,6 +267,7 @@ public class LandingPage extends AppCompatActivity {
         SharedPreferences dayPreferences = getSharedPreferences("dayPreferences", 0);
         SharedPreferences timePreferences = getSharedPreferences("timePreferences", 0);
 
+        // Calculate rows
         int numRows = 0;
         for (Appointment appointment : returnedAppointments){
             if (appointment.getAvailable() > 0){
@@ -281,12 +282,15 @@ public class LandingPage extends AppCompatActivity {
                 }
             }
         }
+
+        // Calculate dynamic table size
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int header = 100 + 45;
         System.out.println(displayMetrics.heightPixels);
         int newHeight = Math.max(((195 + 45) * numRows) + 45 + header, displayMetrics.heightPixels * 3/4);
 
+        // Add rows to table
         for (Appointment appointment : returnedAppointments){
             if (appointment.getAvailable() > 0){
                 String currDate = appointment.getDate().split(",")[0];
@@ -300,8 +304,18 @@ public class LandingPage extends AppCompatActivity {
                 }
             }
         }
+
+        // If no appointments, notify user through TextView
         if(numRows < 1){
             table.setLayoutParams(new TableLayout.LayoutParams(table.getLayoutParams().width, displayMetrics.heightPixels * 17/27));
+            String noAppointmentsText = "No Appointments Available\n(Make sure you check your appointment filters!)";
+            TextView noAppointmentsTextView = (TextView) findViewById(R.id.noAppointmentsOverlay);
+            noAppointmentsTextView.setText(noAppointmentsText);
+            noAppointmentsTextView.setVisibility(View.VISIBLE);
+        }
+        else{
+            TextView noAppointmentsTextView = (TextView) findViewById(R.id.noAppointmentsOverlay);
+            noAppointmentsTextView.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -412,7 +426,6 @@ public class LandingPage extends AppCompatActivity {
             appointmentTime.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
             appointmentAvailability.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
 
-            //String textDay = appointment.getDate().replace(", ", "\n");
             String textDay = "Day";
             String textTime = "Time";
             String textAvailability = "Appts";
@@ -436,8 +449,8 @@ public class LandingPage extends AppCompatActivity {
             row.addView(appointmentDay);
             row.addView(appointmentTime);
             row.addView(appointmentAvailability);
-
         }
+
         // Otherwise with normal listings
         else {
             int width = table.getLayoutParams().width;
