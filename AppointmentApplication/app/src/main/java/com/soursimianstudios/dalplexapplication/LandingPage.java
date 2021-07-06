@@ -47,6 +47,8 @@ public class LandingPage extends AppCompatActivity {
     ArrayList<Appointment> openedAppointments = new ArrayList<>();
     ArrayList<Appointment> freshAppointments = new ArrayList<>();
 
+    boolean temp = true;
+
     // 5 minute refresh interval.
     private final static int REFRESH_INTERVAL = 1000 * 60 * 5;
     final String channelName1 = "dalplexChannelFreshAppointments";
@@ -252,7 +254,6 @@ public class LandingPage extends AppCompatActivity {
     public void createTable(ArrayList<Appointment> returnedAppointments){
         // Dynamically size the table based on number of appointments
         TableLayout table = (TableLayout) findViewById(R.id.AppointmentsTable);
-        int height = table.getLayoutParams().height;
 
         // Go through the rows and remove everything except the
         for (int i = table.getChildCount() - 1; i > -1; i--){
@@ -267,41 +268,49 @@ public class LandingPage extends AppCompatActivity {
         SharedPreferences dayPreferences = getSharedPreferences("dayPreferences", 0);
         SharedPreferences timePreferences = getSharedPreferences("timePreferences", 0);
 
-        // Calculate rows
+
         int numRows = 0;
-        for (Appointment appointment : returnedAppointments){
-            if (appointment.getAvailable() > 0){
-                String currDate = appointment.getDate().split(",")[0];
-                boolean preferredDate = dayPreferences.getString(currDate, String.valueOf(false)).equals("true");
-                if (preferredDate){
-                    String currTime = appointment.getTime();
-                    boolean preferredTime = timePreferences.getString(currTime, String.valueOf(false)).equals("true");
-                    if (preferredTime){
-                        numRows++;
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int newHeight = displayMetrics.heightPixels * 10/16;
+
+        // Calculate rows if returnedAppointments isn't null
+        if (returnedAppointments != null){
+            for (Appointment appointment : returnedAppointments){
+                if (appointment.getAvailable() > 0){
+                    String currDate = appointment.getDate().split(",")[0];
+                    boolean preferredDate = dayPreferences.getString(currDate, String.valueOf(false)).equals("true");
+                    if (preferredDate){
+                        String currTime = appointment.getTime();
+                        boolean preferredTime = timePreferences.getString(currTime, String.valueOf(false)).equals("true");
+                        if (preferredTime){
+                            numRows++;
+                        }
+                    }
+                }
+            }
+
+            // Calculate dynamic table size
+            int header = 100 + 45;
+            newHeight = Math.max(((195 + 45) * numRows) + 45 + header, displayMetrics.heightPixels * 10/16);
+
+            // Add rows to table
+            for (Appointment appointment : returnedAppointments){
+                if (appointment.getAvailable() > 0){
+                    String currDate = appointment.getDate().split(",")[0];
+                    boolean preferredDate = dayPreferences.getString(currDate, String.valueOf(false)).equals("true");
+                    if (preferredDate){
+                        String currTime = appointment.getTime();
+                        boolean preferredTime = timePreferences.getString(currTime, String.valueOf(false)).equals("true");
+                        if (preferredTime){
+                            addRow(newHeight, appointment);
+                        }
                     }
                 }
             }
         }
-
-        // Calculate dynamic table size
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int header = 100 + 45;
-        int newHeight = Math.max(((195 + 45) * numRows) + 45 + header, displayMetrics.heightPixels * 10/16);
-
-        // Add rows to table
-        for (Appointment appointment : returnedAppointments){
-            if (appointment.getAvailable() > 0){
-                String currDate = appointment.getDate().split(",")[0];
-                boolean preferredDate = dayPreferences.getString(currDate, String.valueOf(false)).equals("true");
-                if (preferredDate){
-                    String currTime = appointment.getTime();
-                    boolean preferredTime = timePreferences.getString(currTime, String.valueOf(false)).equals("true");
-                    if (preferredTime){
-                        addRow(newHeight, appointment);
-                    }
-                }
-            }
+        else{
+            table.setLayoutParams(new TableLayout.LayoutParams(table.getLayoutParams().width, newHeight));
         }
 
         // If no appointments, notify user through TextView
