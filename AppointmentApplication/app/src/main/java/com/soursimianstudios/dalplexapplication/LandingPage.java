@@ -50,7 +50,9 @@ public class LandingPage extends AppCompatActivity {
     boolean temp = true;
 
     // 5 minute refresh interval.
-    private final static int REFRESH_INTERVAL = 1000 * 60 * 5;
+    //private final static int REFRESH_INTERVAL = 1000 * 60 * 5;
+    // Temporary 1 minute refresh interval for testing purposes
+    private final static int REFRESH_INTERVAL = 1000 * 60;
     final String channelName1 = "dalplexChannelFreshAppointments";
     final String channelName2 = "dalplexChannelNewAppointments";
 
@@ -121,9 +123,18 @@ public class LandingPage extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
+
+
                 // Below compares fetched appointments to previously fetched appointments
                 // Before checking for new appointments, ensure there is a history
                 if (!previousAppointments.isEmpty()){
+                    //previously occupied
+                    //appointments.set(0, new Appointment(appointments.get(0).getDate(), appointments.get(0).getTime(), 1));
+                    //previousAppointments.set(0, new Appointment(appointments.get(0).getDate(), appointments.get(0).getTime(), 0));
+
+                    //Fresh Appointments
+                    //appointments.add(new Appointment("Monday, July 99, 2050", appointments.get(0).getTime(), 99));
+
                     for (Appointment appointment : appointments){
                         for (Appointment previousAppointment : previousAppointments){
                             if (appointment.getAvailable() > 0 && previousAppointment.getAvailable() == 0){
@@ -268,7 +279,6 @@ public class LandingPage extends AppCompatActivity {
         SharedPreferences dayPreferences = getSharedPreferences("dayPreferences", 0);
         SharedPreferences timePreferences = getSharedPreferences("timePreferences", 0);
 
-
         int numRows = 0;
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -277,7 +287,7 @@ public class LandingPage extends AppCompatActivity {
         // Calculate rows if returnedAppointments isn't null
         if (returnedAppointments != null){
             for (Appointment appointment : returnedAppointments){
-                if (appointment.getAvailable() > 0){
+                //if (appointment.getAvailable() > 0){
                     String currDate = appointment.getDate().split(",")[0];
                     boolean preferredDate = dayPreferences.getString(currDate, String.valueOf(false)).equals("true");
                     if (preferredDate){
@@ -287,8 +297,10 @@ public class LandingPage extends AppCompatActivity {
                             numRows++;
                         }
                     }
-                }
+                //}
             }
+
+
 
             // Calculate dynamic table size
             int header = 100 + 45;
@@ -296,7 +308,7 @@ public class LandingPage extends AppCompatActivity {
 
             // Add rows to table
             for (Appointment appointment : returnedAppointments){
-                if (appointment.getAvailable() > 0){
+                //if (appointment.getAvailable() > 0){
                     String currDate = appointment.getDate().split(",")[0];
                     boolean preferredDate = dayPreferences.getString(currDate, String.valueOf(false)).equals("true");
                     if (preferredDate){
@@ -306,7 +318,7 @@ public class LandingPage extends AppCompatActivity {
                             addRow(newHeight, appointment);
                         }
                     }
-                }
+                //}
             }
         }
         else{
@@ -510,8 +522,10 @@ public class LandingPage extends AppCompatActivity {
 
             appointmentDay.setTextColor(Color.BLACK);
             appointmentTime.setTextColor(Color.BLACK);
-            appointmentAvailability.setTextColor(Color.BLACK);
 
+            int colour = appointment.getAvailable() == 0 ? Color.RED : Color.BLACK;
+            appointmentAvailability.setTextColor(colour);
+            
             appointmentDay.setText(textDay);
             appointmentTime.setText(textTime);
             appointmentAvailability.setText(textAvailability);
