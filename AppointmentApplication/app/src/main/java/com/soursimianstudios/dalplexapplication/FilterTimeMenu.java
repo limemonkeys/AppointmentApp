@@ -159,7 +159,7 @@ public class FilterTimeMenu extends AppCompatActivity {
 
         timePreferences = getSharedPreferences("timePreferences", MODE_PRIVATE);
         //Note: Boolean.getValue(...) doesn't work
-        filterSwitch.setChecked(timePreferences.getString(time, String.valueOf(false)).equals("true"));
+        filterSwitch.setChecked(timePreferences.getString(time, String.valueOf(true)).equals("true"));
 
         // When switch is flipped, commit to SharedPreferences for reference.
         filterSwitch.setOnClickListener(new View.OnClickListener() {

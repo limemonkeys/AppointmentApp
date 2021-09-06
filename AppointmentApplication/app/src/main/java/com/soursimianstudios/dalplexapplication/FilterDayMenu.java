@@ -127,7 +127,7 @@ public class FilterDayMenu extends AppCompatActivity {
 
         dayPreferences = getSharedPreferences("dayPreferences", MODE_PRIVATE);
         // Boolean.getValue(...) doesn't work
-        filterSwitch.setChecked(dayPreferences.getString(day, String.valueOf(false)).equals("true"));
+        filterSwitch.setChecked(dayPreferences.getString(day, String.valueOf(true)).equals("true"));
 
         // When switch is flipped, commit to SharedPreferences for reference.
         filterSwitch.setOnClickListener(new View.OnClickListener() {
