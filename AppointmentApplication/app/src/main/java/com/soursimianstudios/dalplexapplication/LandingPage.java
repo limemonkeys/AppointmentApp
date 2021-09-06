@@ -287,7 +287,6 @@ public class LandingPage extends AppCompatActivity {
 
         // Calculate rows if returnedAppointments isn't null
         if (returnedAppointments != null){
-
             for (Appointment appointment : returnedAppointments){
                 if (appointment.getAvailable() > 0 || (appointment.getAvailable() == 0 && seeFullPreferences.getString("See Full Appointments", String.valueOf(true)).equals("true"))) {
                     String currDate = appointment.getDate().split(",")[0];
@@ -302,15 +301,12 @@ public class LandingPage extends AppCompatActivity {
                 }
             }
 
-
-
             // Calculate dynamic table size
             int header = 100 + 45;
             newHeight = Math.max(((195 + 45) * numRows) + 45 + header, displayMetrics.heightPixels * 10/16);
 
             // Add rows to table
             for (Appointment appointment : returnedAppointments){
-                //if (appointment.getAvailable() == 0 && seeFullPreferences.getString("seeFullPreferences", String.valueOf(false)).equals("true")){
                 if (appointment.getAvailable() > 0 || (appointment.getAvailable() == 0 && seeFullPreferences.getString("See Full Appointments", String.valueOf(true)).equals("true"))) {
                     String currDate = appointment.getDate().split(",")[0];
                     boolean preferredDate = dayPreferences.getString(currDate, String.valueOf(true)).equals("true");
@@ -322,7 +318,6 @@ public class LandingPage extends AppCompatActivity {
                         }
                     }
                 }
-                //}
             }
         }
         else{

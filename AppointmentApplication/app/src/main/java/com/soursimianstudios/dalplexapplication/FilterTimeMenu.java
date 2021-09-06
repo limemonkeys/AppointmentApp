@@ -59,8 +59,17 @@ public class FilterTimeMenu extends AppCompatActivity {
         // Set the times for row creation
         ArrayList<String> timeslots = new ArrayList<>();
 
-        // All time intervals
+        /*
+        All time intervals (but who knows, Dal loves to switch this stuff up...)
+        As of commit, airing on the side of over-listing, than under. Potential for slider, but
+        slider does not work well with complicated schedules. Therefore, stuck with this list.
+
+        As of Sept 6th, 2021
+        Earliest seen opening: 6:00 AM - 7:00 AM
+        Latest seen opening: 9:00 PM - 10:00 PM
+        */
         timeslots.add("6:00 AM - 7:00 AM");
+        timeslots.add("6:30 AM - 7:30 AM");
         timeslots.add("7:00 AM - 8:00 AM");
         timeslots.add("7:30 AM - 8:30 AM");
         timeslots.add("8:00 AM - 9:00 AM");
@@ -75,29 +84,22 @@ public class FilterTimeMenu extends AppCompatActivity {
         timeslots.add("12:30 PM - 1:30 PM");
         timeslots.add("1:00 PM - 2:00 PM");
         timeslots.add("1:30 PM - 2:30 PM");
+        timeslots.add("2:00 PM - 3:00 PM");
         timeslots.add("2:30 PM - 3:30 PM");
         timeslots.add("3:00 PM - 4:00 PM");
+        timeslots.add("3:30 PM - 4:30 PM");
         timeslots.add("4:00 PM - 5:00 PM");
         timeslots.add("4:30 PM - 5:30 PM");
+        timeslots.add("5:00 PM - 6:00 PM");
+        timeslots.add("5:30 PM - 6:30 PM");
         timeslots.add("6:00 PM - 7:00 PM");
+        timeslots.add("6:30 PM - 7:30 PM");
+        timeslots.add("7:00 PM - 8:00 PM");
         timeslots.add("7:30 PM - 8:30 PM");
+        timeslots.add("8:00 PM - 9:00 PM");
+        timeslots.add("8:30 PM - 9:30 PM");
+        timeslots.add("9:00 PM - 10:00 PM");
 
-        /* Specifically Saturday's times intervals
-        timeslots.add("7:00 AM - 8:00 AM");
-        timeslots.add("8:30 AM - 9:30 AM");
-        timeslots.add("10:00 AM - 11:00 AM");
-        timeslots.add("11:30 AM - 12:30 PM");
-        timeslots.add("1:00 PM - 2:00 PM");
-        timeslots.add("2:30 PM - 3:30 PM");
-        timeslots.add("4:00 PM - 5:00 PM");;
-         */
-
-        /* Assuming specifically for holidays (Canada day, 2021). 8am - 2pm
-        timeslots.add("8:00 AM - 9:00 AM");
-        timeslots.add("9:30 AM - 10:30 AM");
-        timeslots.add("11:00 AM - 12:00 PM");
-        timeslots.add("12:30 PM - 1:30 PM");
-         */
 
         for(String timeslot_name : timeslots){
             addRow(timeslot_name);
