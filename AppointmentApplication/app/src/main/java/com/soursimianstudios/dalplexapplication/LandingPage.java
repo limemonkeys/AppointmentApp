@@ -278,6 +278,7 @@ public class LandingPage extends AppCompatActivity {
 
         SharedPreferences dayPreferences = getSharedPreferences("dayPreferences", 0);
         SharedPreferences timePreferences = getSharedPreferences("timePreferences", 0);
+        SharedPreferences seeFullPreferences = getSharedPreferences("seeFullPreferences", 0);
 
         int numRows = 0;
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -286,18 +287,19 @@ public class LandingPage extends AppCompatActivity {
 
         // Calculate rows if returnedAppointments isn't null
         if (returnedAppointments != null){
+
             for (Appointment appointment : returnedAppointments){
-                //if (appointment.getAvailable() > 0){
+                if (appointment.getAvailable() > 0 || (appointment.getAvailable() == 0 && seeFullPreferences.getString("See Full Appointments", String.valueOf(false)).equals("true"))) {
                     String currDate = appointment.getDate().split(",")[0];
                     boolean preferredDate = dayPreferences.getString(currDate, String.valueOf(false)).equals("true");
-                    if (preferredDate){
+                    if (preferredDate) {
                         String currTime = appointment.getTime();
                         boolean preferredTime = timePreferences.getString(currTime, String.valueOf(false)).equals("true");
-                        if (preferredTime){
+                        if (preferredTime) {
                             numRows++;
                         }
                     }
-                //}
+                }
             }
 
 
@@ -308,16 +310,18 @@ public class LandingPage extends AppCompatActivity {
 
             // Add rows to table
             for (Appointment appointment : returnedAppointments){
-                //if (appointment.getAvailable() > 0){
+                //if (appointment.getAvailable() == 0 && seeFullPreferences.getString("seeFullPreferences", String.valueOf(false)).equals("true")){
+                if (appointment.getAvailable() > 0 || (appointment.getAvailable() == 0 && seeFullPreferences.getString("See Full Appointments", String.valueOf(false)).equals("true"))) {
                     String currDate = appointment.getDate().split(",")[0];
                     boolean preferredDate = dayPreferences.getString(currDate, String.valueOf(false)).equals("true");
-                    if (preferredDate){
+                    if (preferredDate) {
                         String currTime = appointment.getTime();
                         boolean preferredTime = timePreferences.getString(currTime, String.valueOf(false)).equals("true");
-                        if (preferredTime){
+                        if (preferredTime) {
                             addRow(newHeight, appointment);
                         }
                     }
+                }
                 //}
             }
         }

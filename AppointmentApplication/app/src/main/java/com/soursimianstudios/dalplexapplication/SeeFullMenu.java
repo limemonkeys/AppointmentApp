@@ -123,7 +123,8 @@ public class SeeFullMenu extends AppCompatActivity {
                 seeFullPreferences = getSharedPreferences("seeFullPreferences", 0);
                 SharedPreferences.Editor editPreference = seeFullPreferences.edit();
                 // apply() does not produce desired results
-                editPreference.putString(enabled, String.valueOf(filterSwitch.isChecked())).commit();
+                System.out.println("HEREEEEEE" + filterSwitch.isChecked());
+                editPreference.putString("See Full Appointments", String.valueOf(filterSwitch.isChecked())).commit();
             }
         });
 
