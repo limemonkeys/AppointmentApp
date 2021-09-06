@@ -50,9 +50,9 @@ public class LandingPage extends AppCompatActivity {
     boolean temp = true;
 
     // 5 minute refresh interval.
-    //private final static int REFRESH_INTERVAL = 1000 * 60 * 5;
+    private final static int REFRESH_INTERVAL = 1000 * 60 * 5;
     // Temporary 1 minute refresh interval for testing purposes
-    private final static int REFRESH_INTERVAL = 1000 * 60;
+    //private final static int REFRESH_INTERVAL = 1000 * 60;
     final String channelName1 = "dalplexChannelFreshAppointments";
     final String channelName2 = "dalplexChannelNewAppointments";
 
@@ -407,36 +407,44 @@ public class LandingPage extends AppCompatActivity {
         TextView appointmentTime = new TextView(this);
         TextView appointmentAvailability = new TextView(this);
 
+        int width = table.getLayoutParams().width;
+
+        row.setPadding(15,45,15,0);
+
+        appointmentDay.setTextColor(Color.parseColor("#000000"));
+        appointmentTime.setTextColor(Color.parseColor("#000000"));
+        appointmentAvailability.setTextColor(Color.parseColor("#000000"));
+
+        appointmentDay.setBackgroundColor(Color.parseColor("#F2F197"));
+        appointmentTime.setBackgroundColor(Color.parseColor("#F2F197"));
+        appointmentAvailability.setBackgroundColor(Color.parseColor("#F2F197"));
+
+        appointmentDay.setGravity(Gravity.CENTER);
+        appointmentTime.setGravity(Gravity.CENTER);
+        appointmentAvailability.setGravity(Gravity.CENTER);
+
+        appointmentDay.setTextSize(15);
+        appointmentTime.setTextSize(15);
+        appointmentAvailability.setTextSize(15);
+
+        appointmentDay.setMaxWidth(width/3);
+        appointmentTime.setMaxWidth(width/3);
+        appointmentAvailability.setMaxWidth(width/3);
+
+        appointmentDay.setMinWidth(width/3);
+        appointmentTime.setMinWidth(width/3);
+        appointmentAvailability.setMinWidth(width/3);
+
+        appointmentDay.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
+        appointmentTime.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
+        appointmentAvailability.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
+
+        appointmentDay.setTextColor(Color.BLACK);
+        appointmentTime.setTextColor(Color.BLACK);
+        appointmentAvailability.setTextColor(appointment.getAvailable() == 0 ? Color.RED : Color.BLACK);
+
         // Only should happen with placeholder value
         if (appointment.getAvailable() == -1){
-
-            int width = table.getLayoutParams().width;
-
-            row.setPadding(15,45,15,0);
-
-            appointmentDay.setTextColor(Color.parseColor("#000000"));
-            appointmentTime.setTextColor(Color.parseColor("#000000"));
-            appointmentAvailability.setTextColor(Color.parseColor("#000000"));
-
-            appointmentDay.setBackgroundColor(Color.parseColor("#F2F197"));
-            appointmentTime.setBackgroundColor(Color.parseColor("#F2F197"));
-            appointmentAvailability.setBackgroundColor(Color.parseColor("#F2F197"));
-
-            appointmentDay.setGravity(Gravity.CENTER);
-            appointmentTime.setGravity(Gravity.CENTER);
-            appointmentAvailability.setGravity(Gravity.CENTER);
-
-            appointmentDay.setTextSize(15);
-            appointmentTime.setTextSize(15);
-            appointmentAvailability.setTextSize(15);
-
-            appointmentDay.setMaxWidth(width/3);
-            appointmentTime.setMaxWidth(width/3);
-            appointmentAvailability.setMaxWidth(width/3);
-
-            appointmentDay.setMinWidth(width/3);
-            appointmentTime.setMinWidth(width/3);
-            appointmentAvailability.setMinWidth(width/3);
 
             appointmentDay.setMaxHeight(100);
             appointmentTime.setMaxHeight(100);
@@ -446,17 +454,9 @@ public class LandingPage extends AppCompatActivity {
             appointmentTime.setMinHeight(100);
             appointmentAvailability.setMinHeight(100);
 
-            appointmentDay.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
-            appointmentTime.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
-            appointmentAvailability.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
-
             String textDay = "Day";
             String textTime = "Time";
             String textAvailability = "Appts";
-
-            appointmentDay.setTextColor(Color.BLACK);
-            appointmentTime.setTextColor(Color.BLACK);
-            appointmentAvailability.setTextColor(Color.BLACK);
 
             appointmentDay.setTypeface(Typeface.DEFAULT_BOLD);
             appointmentTime.setTypeface(Typeface.DEFAULT_BOLD);
@@ -477,35 +477,8 @@ public class LandingPage extends AppCompatActivity {
 
         // Otherwise with normal listings
         else {
-            int width = table.getLayoutParams().width;
-
-            row.setPadding(15,45,15,0);
 
             table.setLayoutParams(new TableLayout.LayoutParams(table.getLayoutParams().width, newHeight));
-
-            appointmentDay.setTextColor(Color.parseColor("#000000"));
-            appointmentTime.setTextColor(Color.parseColor("#000000"));
-            appointmentAvailability.setTextColor(Color.parseColor("#000000"));
-
-            appointmentDay.setBackgroundColor(Color.parseColor("#F2F197"));
-            appointmentTime.setBackgroundColor(Color.parseColor("#F2F197"));
-            appointmentAvailability.setBackgroundColor(Color.parseColor("#F2F197"));
-
-            appointmentDay.setGravity(Gravity.CENTER);
-            appointmentTime.setGravity(Gravity.CENTER);
-            appointmentAvailability.setGravity(Gravity.CENTER);
-
-            appointmentDay.setTextSize(15);
-            appointmentTime.setTextSize(15);
-            appointmentAvailability.setTextSize(15);
-
-            appointmentDay.setMaxWidth(width/3);
-            appointmentTime.setMaxWidth(width/3);
-            appointmentAvailability.setMaxWidth(width/3);
-
-            appointmentDay.setMinWidth(width/3);
-            appointmentTime.setMinWidth(width/3);
-            appointmentAvailability.setMinWidth(width/3);
 
             appointmentDay.setMaxHeight(150);
             appointmentTime.setMaxHeight(150);
@@ -515,21 +488,10 @@ public class LandingPage extends AppCompatActivity {
             appointmentTime.setMinHeight(150);
             appointmentAvailability.setMinHeight(150);
 
-            appointmentDay.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
-            appointmentTime.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
-            appointmentAvailability.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
-
             String textDay = appointment.getDate().replace(", ", "\n");
-
             String textTime = appointment.getTime().replace(" - ", "-\n");
             String textAvailability = String.valueOf(appointment.getAvailable()) + " appt(s)";
 
-            appointmentDay.setTextColor(Color.BLACK);
-            appointmentTime.setTextColor(Color.BLACK);
-
-            int colour = appointment.getAvailable() == 0 ? Color.RED : Color.BLACK;
-            appointmentAvailability.setTextColor(colour);
-            
             appointmentDay.setText(textDay);
             appointmentTime.setText(textTime);
             appointmentAvailability.setText(textAvailability);
