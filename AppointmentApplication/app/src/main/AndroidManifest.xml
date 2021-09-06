@@ -16,6 +16,7 @@
         <activity android:name=".FilterMenu" />
         <activity android:name=".FilterDayMenu" />
         <activity android:name=".FilterTimeMenu" />
+        <activity android:name=".SeeFullMenu" />
         <activity android:name=".LandingPage">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

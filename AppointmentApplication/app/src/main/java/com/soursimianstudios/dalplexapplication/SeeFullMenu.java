@@ -19,10 +19,10 @@ import androidx.core.content.res.ResourcesCompat;
 
 import java.util.ArrayList;
 
-public class FilterDayMenu extends AppCompatActivity {
+public class SeeFullMenu extends AppCompatActivity {
 
     int tableWidth, newHeight;
-    SharedPreferences dayPreferences;
+    SharedPreferences seeFullPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +43,7 @@ public class FilterDayMenu extends AppCompatActivity {
         menuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(FilterDayMenu.this, LandingPage.class);
+                Intent intent = new Intent(SeeFullMenu.this, LandingPage.class);
                 startActivity(intent);
             }
         });
@@ -52,37 +52,24 @@ public class FilterDayMenu extends AppCompatActivity {
         helpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(FilterDayMenu.this, HelpMenu.class);
+                Intent intent = new Intent(SeeFullMenu.this, HelpMenu.class);
                 startActivity(intent);
             }
         });
 
         // Set the days for row creation
-        dayPreferences = getSharedPreferences("dayPreferences", MODE_PRIVATE);
+        seeFullPreferences = getSharedPreferences("seeFullPreferences", MODE_PRIVATE);
 
-        int height = table.getLayoutParams().height;
-        ArrayList<String> days = new ArrayList<>();
-        days.add("Monday");
-        days.add("Tuesday");
-        days.add("Wednesday");
-        days.add("Thursday");
-        days.add("Friday");
-        days.add("Saturday");
-        days.add("Sunday");
-
-        // Add each day as a row
-        for(String day_name : days){
-            addRow(day_name);
-        }
+        addRow("See Full Appointments");
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int newHeight = Math.max(((150 + 45) * days.size()) + 45, displayMetrics.heightPixels * 3/4);
+        int newHeight = Math.max((150 + 45) + 45, displayMetrics.heightPixels * 3/4);
         table.setLayoutParams(new TableLayout.LayoutParams(tableWidth, newHeight));
     }
 
     // Add rows with switches for each of the days
-    public void addRow(String day){
+    public void addRow(String enabled){
         TableLayout table = (TableLayout) findViewById(R.id.AppointmentsTable);
         int width = table.getLayoutParams().width;
 
@@ -123,20 +110,20 @@ public class FilterDayMenu extends AppCompatActivity {
         filterText.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
         filterSwitch.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
 
-        filterText.setText(day);
+        filterText.setText(enabled);
 
-        dayPreferences = getSharedPreferences("dayPreferences", MODE_PRIVATE);
+        seeFullPreferences = getSharedPreferences("seeFullPreferences", MODE_PRIVATE);
         // Boolean.getValue(...) doesn't work
-        filterSwitch.setChecked(dayPreferences.getString(day, String.valueOf(false)).equals("true"));
+        filterSwitch.setChecked(seeFullPreferences.getString(enabled, String.valueOf(true)).equals("true"));
 
         // When switch is flipped, commit to SharedPreferences for reference.
         filterSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dayPreferences = getSharedPreferences("dayPreferences", 0);
-                SharedPreferences.Editor editPreference = dayPreferences.edit();
+                seeFullPreferences = getSharedPreferences("seeFullPreferences", 0);
+                SharedPreferences.Editor editPreference = seeFullPreferences.edit();
                 // apply() does not produce desired results
-                editPreference.putString(day, String.valueOf(filterSwitch.isChecked())).commit();
+                editPreference.putString(enabled, String.valueOf(filterSwitch.isChecked())).commit();
             }
         });
 
